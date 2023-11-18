@@ -1,4 +1,7 @@
 #define _CRT_SECURE_NO_WARNINGS 
+#define GRID_WIDTH 21
+#define GRID_HEIGHT 16
+#define INITIAL_CASTAR_COINS 100
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
@@ -6,8 +9,16 @@
 #include <string.h>
 
 
-#include <stdio.h>
-#include <stdlib.h>
+// Structure unit
+typedef struct {
+    int x, y;
+    int movementRange;
+} Unit;
+
+// Structure building
+typedef struct {
+    int x, y;
+} Building;
 
 int main() {
     int choice;
