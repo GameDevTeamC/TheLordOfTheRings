@@ -40,6 +40,14 @@ int main() {
 
         displayActions();
 
+void menu() {
+    //variables
+    int choice;
+  
+    //start menu
+    Startmenu:
+    printf("Welcome to the Ring World!\n\n");
+
         int choice;
         printf("Opção: ");
         scanf("%d", &choice);
