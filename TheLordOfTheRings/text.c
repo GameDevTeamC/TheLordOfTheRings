@@ -8,7 +8,6 @@
 #include <locale.h>
 #include <string.h>
 
-
 // Structure unit
 typedef struct {
     int x, y;
@@ -21,42 +20,53 @@ typedef struct {
 } Building;
 
 int main() {
+    //variables
     int choice;
-
+  
+    //start menu
+    Startmenu:
     printf("Welcome to the Ring World!\n\n");
 
     printf("1. Start New Game\n");
     printf("2. Load Game\n");
     printf("3. Settings\n");
     printf("4. Exit\n\n");
+    printf("Enter your choice (1-4): ");
+    scanf("%d", &choice);
 
-    do {
+   
+    switch(choice)
+    {
+       case 1:
+          system("cls");
+          printf("\nStarting a new game...\n");
+          getchar();
+          break;
 
-        printf("Enter your choice (1-4): ");
-        scanf("%d", &choice);
+       case 2:
+          system("cls");
+          printf("\nLoading game...\n");
+          getchar();
+          break;
 
-        if (choice == 1)
-        {
-            printf("Starting a new game...\n");
-        }
-        else if(choice == 2)
-        {
-            printf("Loading game...\n");
-        }
-        else if(choice == 3)
-        {
-            printf("Entering settings...\n");
-        }
-        else if(choice == 4)
-        {
-            printf("Exiting the Ring World. See you soon..!\n");
-        }
-        else
-        {
-            printf("Invalid choice, please select a number between 1-4.\n");
-        }
+       case 3:
+          system("cls");
+          printf("\nEntering settings...\n");
+          getchar();
+          break;
 
-    } while (choice != 4);
+       case 4:
+          system("cls");
+          printf("\nExiting the Ring World. See you soon..!\n");
+          getchar();
+          break;
 
+      default:
+          printf("\nInvalid choice, please select a number between 1-4.\n");
+          getchar(); 
+          goto Startmenu;
+          break;
+    }
+    printf("end");
     return 0;
 }
