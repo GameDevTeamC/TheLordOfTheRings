@@ -45,6 +45,131 @@ typedef struct {
     int x, y;
 } Building;
 
+//Start Menu
+void menu() {
+    //variables
+    int choice;
+    int playerchoice;
+
+    //start menu
+Startmenu:
+    printf("Bem-Vindo ao Ring World!\n\n");
+
+    printf("1. Começar um Novo Jogo\n");
+    printf("2. Carregar Jogo\n");
+    printf("3. Defenições\n");
+    printf("4. Sair\n\n");
+    printf("Introduza a sua escolha (1-4): ");
+    scanf("%d", &choice);
+
+
+    switch (choice)
+    {
+    case 1:
+        system("cls");
+        printf("\nComeçando um novo Jogo...\n");
+        printf("Escolha o seu lado:\n");
+        printf("1. Gondor/Rivendell\n");
+        printf("2. Mordor\n");
+        printf("Introduza a sua Escolha (1-2): ");
+        scanf("%d", &playerchoice);
+        switch (playerchoice) {
+        case 1:
+            printf("Voce escolheu Gondor/Rivendell. Vamos começar o jogo!\n");
+            break;
+        case 2:
+            printf("Voce escolheu Mordor. Vamos começar o jogo!\n");
+            break;
+        default:
+            printf("Escolha invalida, por favor selecione o seu lado.\n");
+            getchar();
+            getchar();
+            goto Startmenu;
+        }
+        break;
+
+    case 2:
+        system("cls");
+        printf("\nCarregando o jogo...\n");
+        getchar();
+        break;
+
+    case 3:
+        system("cls");
+        printf("\nAcessando as defenições...\n");
+        getchar();
+        break;
+
+    case 4:
+        system("cls");
+        printf("\nSaindo do Ring World. Até á proxima..!\n");
+        getchar();
+        break;
+
+    default:
+        printf("\nEscolha inválida, por favor selecione um número entre 1-4.\n");
+        getchar();
+        goto Startmenu;
+        break;
+    }
+    printf("fim");
+    return 0;
+}
+
+// Function to display the game grid
+void displayGrid(Unit* units, int numUnits, Building* buildings, int numBuildings);
+
+// Function to display available actions
+void displayActions();
+
+int main() {
+    menu();
+
+    int currentPlayer = 1;
+    int castarCoins[2] = { INITIAL_CASTAR_COINS, INITIAL_CASTAR_COINS };
+    Unit units[2];
+    Building buildings[2];
+
+    // Game loop
+    while (1) {
+        system("cls");
+        displayGrid(units, 2, buildings, 2);
+        printf("Vez do jogador %d\n", currentPlayer);
+        printf("Castar Coins: %d\n", castarCoins[currentPlayer - 1]);
+
+        displayActions();
+
+        int choice;
+        printf("Op%c%co:", 135, 198);
+        scanf("%d", &choice);
+
+        switch (choice) {
+        case 1:
+            // Place building
+            break;
+        case 2:
+            // Select unit
+            break;
+        case 3:
+            // Move unit
+            break;
+        case 4:
+            // Attack
+            break;
+        case 5:
+            // End turn
+            // Switch players
+            currentPlayer = (currentPlayer % 2) + 1;
+            break;
+        default:
+            printf("Opção Inválida. Escolher outra vez.\n");
+        }
+    }
+
+    return 0;
+}
+
+
 void displayGrid(Unit* units, int numUnits, Building* buildings, int numBuildings) {
     // Print letters
     printf("   ");
@@ -126,7 +251,7 @@ void displayGrid(Unit* units, int numUnits, Building* buildings, int numBuilding
 
 void displayActions() {
     // Display available actions for the player
-    printf("1. Posicionar Constução\n");
+    printf("1. Posicionar Construção\n");
     printf("2. Selecionar Unidade\n");
     printf("3. Mover Unidade\n");
     printf("4. Atacar\n");
@@ -190,275 +315,5 @@ void MovingMilitaryMordor()
     char SiegeTowers;
     SiegeTowers = "%c%c", 83, 84;
 }
-//Start Menu
-void menu() {
-    //variables
-    int choice;
-    int playerchoice;
-    
-    //start menu
-Startmenu:
-    printf("Bem-Vindo ao Ring World!\n\n");
 
-    printf("1. Começar um Novo Jogo\n");
-    printf("2. Carregar Jogo\n");
-    printf("3. Defenições\n");
-    printf("4. Sair\n\n");
-    printf("Introduza a sua escolha (1-4): ");
-    scanf("%d", &choice);
-
-
-    switch (choice)
-    {
-    case 1:
-        system("cls");
-        printf("\nComeçando um novo Jogo...\n");
-        printf("Escolha o seu lado:\n");
-        printf("1. Gondor/Rivendell\n");
-        printf("2. Mordor\n");
-        printf("Introduza a sua Escolha (1-2): ");
-        scanf("%d", &playerchoice);
-        switch (playerchoice) {
-        case 1:
-            printf("Voce escolheu Gondor/Rivendell. Vamos começar o jogo!\n");
-            break;
-        case 2:
-            printf("Voce escolheu Mordor. Vamos começar o jogo!\n");
-            break;
-        default:
-            printf("Escolha invalida, por favor selecione o seu lado.\n");
-            getchar();
-            getchar();
-            goto Startmenu;
-        }
-        break;
-
-    case 2:
-        system("cls");
-        printf("\nCarregando o jogo...\n");
-        getchar();
-        break;
-
-    case 3:
-        system("cls");
-        printf("\nAcessando as defenições...\n");
-        getchar();
-        break;
-
-    case 4:
-        system("cls");
-        printf("\nSaindo do Ring World. Até á proxima..!\n");
-        getchar();
-        break;
-
-    default:
-        printf("\nEscolha inválida, por favor selecione um número entre 1-4.\n");
-        getchar();
-        goto Startmenu;
-        break;
-    }
-    printf("fim");
-    return 0;
-}
-
-int main() {
-    menu();
-
-    int currentPlayer = 1;
-    int castarCoins[2] = { INITIAL_CASTAR_COINS, INITIAL_CASTAR_COINS };
-    Unit units[2];
-    Building buildings[2];
-
-    // Game loop
-    while (1) {
-        system("cls");
-        displayGrid(units, 2, buildings, 2);
-        printf("Vez do jogador %d\n", currentPlayer);
-        printf("Moedas Castar: %d\n", castarCoins[currentPlayer - 1]);
-
-        displayActions();
-
-        int choice;
-        printf("Op%c%co:", 135, 198);
-        scanf("%d", &choice);
-
-
-void menu() {
-    //variables
-    int choice;
-    int playerchoice;
-  
-    //start menu
-    Startmenu:
-    printf("Welcome to the Ring World!\n\n");
-
-    printf("1. Start New Game\n");
-    printf("2. Load Game\n");
-    printf("3. Settings\n");
-    printf("4. Exit\n\n");
-    printf("Enter your choice (1-4): ");
-    scanf("%d", &choice);
-
-    
-    switch(choice)
-    {
-       case 1:
-          system("cls");
-          printf("\nStarting a new game...\n");
-          printf("Choose your side:\n");
-          printf("1. Gondor/Rivendell\n");
-          printf("2. Mordor\n");
-          printf("Enter your choice (1-2): ");
-          scanf("%d", &playerchoice);
-          switch (playerchoice) {
-          case 1:
-              printf("You chose Gondor/Rivendell. Let the game begin!\n");
-              break;
-          case 2:
-              printf("You chose Mordor. Let the game begin!\n");
-              break;
-          default:
-              printf("Invalid choice, please select your side.\n");
-              getchar();
-              getchar();
-              goto Startmenu;
-          }
-          break;
-
-       case 2:
-          system("cls");
-          printf("\nLoading game...\n");
-          getchar();
-          break;
-
-       case 3:
-          system("cls");
-          printf("\nEntering settings...\n");
-          getchar();
-          break;
-
-       case 4:
-          system("cls");
-          printf("\nExiting the Ring World. See you soon..!\n");
-          getchar();
-          break;
-
-      default:
-          printf("\nInvalid choice, please select a number between 1-4.\n");
-          getchar(); 
-          goto Startmenu;
-          break;
-    }
-    printf("end");
-    return 0;
-}
-
-// Function to display the game grid
-void displayGrid(Unit* units, int numUnits, Building* buildings, int numBuildings);
-
-// Function to display available actions
-void displayActions();
-
-int main() {
-    menu();
-
-    int currentPlayer = 1;
-    int castarCoins[2] = { INITIAL_CASTAR_COINS, INITIAL_CASTAR_COINS };
-    Unit units[2];
-    Building buildings[2];
-
-    // Game loop
-    while (1) {
-        system("cls");
-        displayGrid(units, 2, buildings, 2);
-        printf("Vez do jogador %d\n", currentPlayer);
-        printf("Castar Coins: %d\n", castarCoins[currentPlayer - 1]);
-
-        displayActions();
-
-        int choice;
-        printf("Op%c%co:", 135, 198);
-        scanf("%d", &choice);
-
-        switch (choice) {
-        case 1:
-            // Place building
-            break;
-        case 2:
-            // Select unit
-            break;
-        case 3:
-            // Move unit
-            break;
-        case 4:
-            // Attack
-            break;
-        case 5:
-            // End turn
-            // Switch players
-            currentPlayer = (currentPlayer % 2) + 1;
-            break;
-        default:
-            printf("Opção Inválida. Escolher outra vez.\n");
-        }
-    }
-
-    return 0;
-}
-
-void displayGrid(Unit* units, int numUnits, Building* buildings, int numBuildings) {
-    // Print letters
-    printf("   ");
-    for (int i = 0; i < GRID_WIDTH; i++) {
-        printf(" %c", 'A' + i);
-    }
-    printf("\n");
-
-    // Print top border
-    printf("   ");
-    printf("%c%c%c", 218, 196, 194);
-    for (int i = 0; i < (GRID_WIDTH / 2) * 2 - 1; i++) {
-        printf("%c%c", 196, 194);
-    }
-    printf("%c%c", 196, 191);
-    printf("\n");
-
-    // Print grid
-    for (int i = 0; i < GRID_HEIGHT; i++) {
-        // Prin left border and numbers
-        printf("%2d %c", i + 1, 179);
-
-        for (int j = 0; j < GRID_WIDTH; j++) {
-            // Check if a unit or building in this position
-            int unitOrBuilding = 0;
-            for (int k = 0; k < numUnits; k++) {
-                if (units[k].x == j && units[k].y == i) {
-                    printf("U");
-                    unitOrBuilding = 1;
-                    break;
-                }
-            }
-            if (!unitOrBuilding) {
-                for (int k = 0; k < numBuildings; k++) {
-                    if (buildings[k].x == j && buildings[k].y == i) {
-                        printf("B");
-                        unitOrBuilding = 1;
-                        break;
-                    }
-                }
-            }
-
-            // If no unit or building print empty cell
-            if (!unitOrBuilding) {
-                printf("E");
-            }
-
-            // Print vertical bordar
-            if (j < GRID_WIDTH - 1) {
-                printf("%c", 179);
-            }
-        }
-
-    return 0;
-}
 
