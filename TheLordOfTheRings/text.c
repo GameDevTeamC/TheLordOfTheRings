@@ -126,11 +126,11 @@ void displayGrid(Unit* units, int numUnits, Building* buildings, int numBuilding
 
 void displayActions() {
     // Display available actions for the player
-    printf("1. Place Building\n");
-    printf("2. Select Unit\n");
-    printf("3. Move Unit\n");
-    printf("4. Attack\n");
-    printf("5. End Turn\n");
+    printf("1. Posicionar Constução\n");
+    printf("2. Selecionar Unidade\n");
+    printf("3. Mover Unidade\n");
+    printf("4. Atacar\n");
+    printf("5. Encerrar Turno\n");
 }
 
 void buildings()
@@ -198,13 +198,13 @@ void menu() {
     
     //start menu
 Startmenu:
-    printf("Welcome to the Ring World!\n\n");
+    printf("Bem-Vindo ao Ring World!\n\n");
 
-    printf("1. Start New Game\n");
-    printf("2. Load Game\n");
-    printf("3. Settings\n");
-    printf("4. Exit\n\n");
-    printf("Enter your choice (1-4): ");
+    printf("1. Começar um Novo Jogo\n");
+    printf("2. Carregar Jogo\n");
+    printf("3. Defenições\n");
+    printf("4. Sair\n\n");
+    printf("Introduza a sua escolha (1-4): ");
     scanf("%d", &choice);
 
 
@@ -212,21 +212,21 @@ Startmenu:
     {
     case 1:
         system("cls");
-        printf("\nStarting a new game...\n");
-        printf("Choose your side:\n");
+        printf("\nComeçando um novo Jogo...\n");
+        printf("Escolha o seu lado:\n");
         printf("1. Gondor/Rivendell\n");
         printf("2. Mordor\n");
-        printf("Enter your choice (1-2): ");
+        printf("Introduza a sua Escolha (1-2): ");
         scanf("%d", &playerchoice);
         switch (playerchoice) {
         case 1:
-            printf("You chose Gondor/Rivendell. Let the game begin!\n");
+            printf("Voce escolheu Gondor/Rivendell. Vamos começar o jogo!\n");
             break;
         case 2:
-            printf("You chose Mordor. Let the game begin!\n");
+            printf("Voce escolheu Mordor. Vamos começar o jogo!\n");
             break;
         default:
-            printf("Invalid choice, please select your side.\n");
+            printf("Escolha invalida, por favor selecione o seu lado.\n");
             getchar();
             getchar();
             goto Startmenu;
@@ -235,29 +235,29 @@ Startmenu:
 
     case 2:
         system("cls");
-        printf("\nLoading game...\n");
+        printf("\nCarregando o jogo...\n");
         getchar();
         break;
 
     case 3:
         system("cls");
-        printf("\nEntering settings...\n");
+        printf("\nAcessando as defenições...\n");
         getchar();
         break;
 
     case 4:
         system("cls");
-        printf("\nExiting the Ring World. See you soon..!\n");
+        printf("\nSaindo do Ring World. Até á proxima..!\n");
         getchar();
         break;
 
     default:
-        printf("\nInvalid choice, please select a number between 1-4.\n");
+        printf("\nEscolha inválida, por favor selecione um número entre 1-4.\n");
         getchar();
         goto Startmenu;
         break;
     }
-    printf("end");
+    printf("fim");
     return 0;
 }
 
@@ -274,7 +274,7 @@ int main() {
         system("cls");
         displayGrid(units, 2, buildings, 2);
         printf("Vez do jogador %d\n", currentPlayer);
-        printf("Castar Coins: %d\n", castarCoins[currentPlayer - 1]);
+        printf("Moedas Castar: %d\n", castarCoins[currentPlayer - 1]);
 
         displayActions();
 
