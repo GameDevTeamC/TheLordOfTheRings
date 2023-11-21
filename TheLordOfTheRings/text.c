@@ -124,6 +124,7 @@ void displayActions();
 
 int main() {
     menu();
+    setlocale(LC_ALL, "Portuguese");
 
     int currentPlayer = 1;
     int castarCoins[2] = { INITIAL_CASTAR_COINS, INITIAL_CASTAR_COINS };
