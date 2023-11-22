@@ -41,9 +41,9 @@ char grid[16][26];
 
 //clean array table
 void cleantable() {
-    for (int u = 0; u <= 25;u++) {
-        for (int i = 0; i <= 15; i++) {
-            grid[i][u] = " ";
+    for (int u = 0; u < 16;u++) {
+        for (int i = 0; i < 26; i++) {
+            grid[u][i] = ' ';
         }
     }
 }
@@ -65,6 +65,14 @@ void menu() {
     int choice;
     int playerchoice;
 
+    // clean display array
+    cleantable();
+
+    // define values
+    grid[3][9] = 'F';
+    grid[8][3] = 'A';
+
+
     //start menu
 Startmenu:
     printf("Bem-Vindo ao Ring World!\n\n");
@@ -81,7 +89,8 @@ Startmenu:
     {
     case 1:
         system("cls");
-        printf("\nComeçando um novo Jogo...\n");
+        printf("\nComeçando um novo Jogo ...\n");     
+        Sleep(2000);
         printf("Escolha o seu lado:\n");
         printf("1. Gondor/Rivendell\n");
         printf("2. Mordor\n");
@@ -89,47 +98,47 @@ Startmenu:
         scanf("%d", &playerchoice);
         switch (playerchoice) {
         case 1:
+            system("cls");
             printf("Voce escolheu Gondor/Rivendell. Vamos começar o jogo!\n");
+            Sleep(2000);
             break;
         case 2:
+            system("cls");
             printf("Voce escolheu Mordor. Vamos começar o jogo!\n");
+            Sleep(2000);
             break;
         default:
+            system("cls");
             printf("Escolha invalida, por favor selecione o seu lado.\n");
-            getchar();
-            getchar();
+            Sleep(2000);
             goto Startmenu;
         }
         break;
 
     case 2:
         system("cls");
-        printf("\nCarregando o jogo ");
-        printf(".");
-        printf(".");
-        printf(".\n");
-        getchar();
+        printf("\nCarregando o jogo ... ");
+        Sleep(2000);
         break;
 
     case 3:
         system("cls");
-        printf("\nAcessando as defenições...\n");
-        getchar();
+        printf("\nAcessando as defenições ... \n");
+        Sleep(2000);
         break;
 
     case 4:
         system("cls");
-        printf("\nSaindo do Ring World. Até á proxima..!\n");
-        getchar();
+        printf("\nSaindo do Ring World. Até á proxima!\n");
+        Sleep(2000);
         break;
 
     default:
-        printf("\nEscolha inválida, por favor selecione um número entre 1-4.\n");
-        getchar();
+        printf("\nEscolha inválida, por favor selecione um número entre 1-4!\n");
+        Sleep(2000);
         goto Startmenu;
         break;
     }
-    printf("fim");
     return 0;
 }
 
@@ -139,6 +148,20 @@ void displayGrid(Unit* units, int numUnits, Building* buildings, int numBuilding
 // Function to display available actions
 void displayActions();
 
+// Function to position the buildings
+void posicionar(){ 
+    char numpos, letrapos, carater;
+    getchar();
+    printf("\nSelecione a posicao:\nNumero >> ");
+    scanf("%c", &numpos);
+    getchar();
+    printf("\nLetra >> ");
+    scanf("%c", &letrapos);
+    printf("Bota ai o que tu queres posicionar: ");
+    getchar();
+    scanf("%c", &carater);
+    grid[numpos - 1][letrapos - 96] = carater;
+}
 int main() {
     menu();
 
@@ -160,9 +183,11 @@ int main() {
         printf("Op%c%co:", 135, 198);
         scanf("%d", &choice);
 
+       
+
         switch (choice) {
         case 1:
-            // Place building
+            posicionar();
             break;
         case 2:
             // Select unit
@@ -211,9 +236,8 @@ void displayGrid(Unit* units, int numUnits, Building* buildings, int numBuilding
         printf("%2d %c", i + 1, 179);
 
         for (int j = 0; j < GRID_WIDTH; j++) {
-            // Check if a unit or building in this position
             int unitOrBuilding = 0;
-            for (int k = 0; k < numUnits; k++) {
+            /* for (int k = 0; k < numUnits; k++) {
                 if (units[k].x == j && units[k].y == i) {
                     printf("U");
                     unitOrBuilding = 1;
@@ -228,11 +252,11 @@ void displayGrid(Unit* units, int numUnits, Building* buildings, int numBuilding
                         break;
                     }
                 }
-            }
+            }*/
 
             // If no unit or building print empty cell
             if (!unitOrBuilding) {
-                printf(" ");
+                printf("%c", grid[i][j]);
             }
 
             // Print vertical bordar
