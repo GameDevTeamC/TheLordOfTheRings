@@ -33,6 +33,22 @@
 #include <ctype.h>
 #include <locale.h>
 #include <string.h>
+#include <time.h>
+#include <windows.h>
+
+//array for table positions
+char grid[16][26];
+
+//clean array table
+void cleantable() {
+    int u = 0;
+    for (int i = 0; i <= 26;i++) {
+        for (int i = 0; i <= 16; i++) {
+            grid[i][u] = " ";
+            u++;
+        }
+    }
+}
 
 // Structure unit
 typedef struct {
@@ -90,7 +106,14 @@ Startmenu:
 
     case 2:
         system("cls");
-        printf("\nCarregando o jogo...\n");
+        printf("\nCarregando o jogo ");
+        //sleep(1000);
+        printf(".");
+        //sleep(1000);
+        printf(".");
+        //sleep(1000);
+        printf(".\n");
+        //sleep(1000);
         getchar();
         break;
 
@@ -183,6 +206,7 @@ void displayGrid(Unit* units, int numUnits, Building* buildings, int numBuilding
     printf("%c%c%c", 218, 196, 194);
     for (int i = 0; i < (GRID_WIDTH / 2) * 2 - 2; i++) {
         printf("%c%c", 196, 194);
+
     }
     printf("%c%c", 196, 191);
     printf("\n");
@@ -214,7 +238,7 @@ void displayGrid(Unit* units, int numUnits, Building* buildings, int numBuilding
 
             // If no unit or building print empty cell
             if (!unitOrBuilding) {
-                printf("E");
+                printf(" ");
             }
 
             // Print vertical bordar
@@ -262,8 +286,8 @@ void buildings()
 {
     //bases
     char Gondor, Mordor;
-    Gondor = "%c%c%c%c", 71, 71, 71, 71;
-    Mordor = "%c%c%c%c", 77, 77, 77, 77;
+    Gondor = "GGGG";
+    Mordor = "MMMM";
 
     //Mines
     char Shire, Erebor;
