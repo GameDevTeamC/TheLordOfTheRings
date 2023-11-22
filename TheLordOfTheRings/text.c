@@ -41,11 +41,9 @@ char grid[16][26];
 
 //clean array table
 void cleantable() {
-    int u = 0;
-    for (int i = 0; i <= 26;i++) {
+    for (int u = 0; u <= 26;u++) {
         for (int i = 0; i <= 16; i++) {
             grid[i][u] = " ";
-            u++;
         }
     }
 }
