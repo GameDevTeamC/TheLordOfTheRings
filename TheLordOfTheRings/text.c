@@ -48,6 +48,12 @@ void cleantable() {
     }
 }
 
+//struct info for the player side
+struct PlayerClass {
+    int id;
+    char name[100];
+};
+
 //struct info player
 struct Player {
     struct PlayerClass playerClass;
@@ -56,11 +62,6 @@ struct Player {
     int coins;
 };
 
-//struct info for the player side
-struct PlayerClass {
-    int id;
-    char name[100];
-};
 
 //struct info for the building type
 struct BuildingType {
