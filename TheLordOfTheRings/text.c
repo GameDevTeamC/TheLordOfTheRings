@@ -41,8 +41,8 @@ char grid[16][26];
 
 //clean array table
 void cleantable() {
-    for (int u = 0; u <= 26;u++) {
-        for (int i = 0; i <= 16; i++) {
+    for (int u = 0; u <= 25;u++) {
+        for (int i = 0; i <= 15; i++) {
             grid[i][u] = " ";
         }
     }
@@ -105,13 +105,9 @@ Startmenu:
     case 2:
         system("cls");
         printf("\nCarregando o jogo ");
-        //sleep(1000);
         printf(".");
-        //sleep(1000);
         printf(".");
-        //sleep(1000);
         printf(".\n");
-        //sleep(1000);
         getchar();
         break;
 
