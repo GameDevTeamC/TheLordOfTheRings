@@ -209,25 +209,30 @@ void displayGrid(Unit* units, int numUnits, Building* buildings, int numBuilding
 void displayActions();
 
 // Function to position the buildings
-void posicionar(char grid_a[16][26]){
-    char numpos, letrapos, carater;
-    numpos = getchar();
+void posicionar(char grid_a[16][26]) {
+    
+    char letrapos, carater;
+    int numpos;
+
     printf("\nSelecione a posicao:\nNumero >> ");
-    scanf("%c", &numpos);
-    letrapos = getchar(); 
+    scanf("%d", &numpos);
+
+    getchar();
     printf("\nLetra >> ");
     scanf("%c", &letrapos);
+
+    getchar();
     printf("Bota ai o que tu queres posicionar: ");
-    carater = getchar(); 
     scanf("%c", &carater);
+
     numpos -= 1;
     letrapos -= 97;
-    return grid_a[numpos][letrapos] = carater;
-    
+    grid_a[numpos][letrapos] = carater;
 }
+
 void buildingsmenu(){ //show buildings for position
-    printf("\nConstru%c%ces:\nBase == (30cc)\nMina == (20cc)\nQuartel == (25cc)\nEst%cbulos == (25cc)\nArsenal == (30cc)", 135, 228,181);
-    printf("\nTropas:\nInfantaria == (10cc)\nCavalaria == (15cc)\nArtilharia == (20cc)\n");
+    printf("\nConstru%c%ces:\nBase == (%d)\nMina == (%d)\nQuartel == (25cc)\nEst%cbulos == (25cc)\nArsenal == (30cc)", 135, 228,181);
+    printf("\nTropas:\nInfantaria == (%d)\nCavalaria == (%d)\nArtilharia == (20cc)\n");
 }
 
 
@@ -257,6 +262,8 @@ int main() {
 
         switch (choice) {
         case 1:
+            system("cls");
+            displayGrid(units, 2, buildings, 2);
             buildingsmenu();
             posicionar(grid);
             break;
