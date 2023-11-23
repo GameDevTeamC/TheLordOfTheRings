@@ -219,14 +219,21 @@ void posicionar(char grid_a[16][26]) {
     
     char letrapos, carater;
     int numpos;
-
+    selectnumpos:
     printf("\nSelecione a posicao:\nNumero >> ");
     scanf("%d", &numpos);
-    //falta verificador
+    if (numpos > 16 || numpos < 0)
+    {
+        goto selectnumpos;
+    }
+    selectletrapos:
     getchar();
     printf("\nLetra >> ");
     scanf("%c", &letrapos);
-    //falta verificador
+    if (letrapos > 122 || letrapos < 97)
+    {
+        goto selectletrapos;
+    }
     getchar();
     printf("Bota ai o que tu queres posicionar: ");
     scanf("%c", &carater);
@@ -276,17 +283,6 @@ void displayUnitActions() {
     printf("2. Atacar\n");
     printf("3. Voltar\n");
 }
-
-//function to display the unit actions after being select
-//void displayUnitActions() {
-//
-//    printf("\nAcoes disponiveis para a unidade:\n");
-//    printf("1. Mover\n");
-//    printf("2. Atacar\n");
-//    printf("3. Voltar\n");
-//
-//}
-
 
 int main() {
     menu();
