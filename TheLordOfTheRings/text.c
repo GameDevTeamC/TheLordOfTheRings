@@ -214,6 +214,49 @@ void posicionar(){
     scanf("%c", &carater);
     grid[numpos - 1][letrapos - 96] = carater;
 }
+
+//function to select a unit from the grid
+void selecionar()
+{
+    char grid[16][26];
+    int x, y;
+
+    printf("Selecione a posiçao da unidade (linha e coluna): ");
+    scanf("%d %d", &x, &y);
+
+    //checks if the selected position is within the grid bounds
+    if (x >= 1 && x <= GRID_HEIGHT && y >= 1 && y <= GRID_WIDTH)
+    {
+        //checks if there is a unit at the selected position
+        if (grid[x - 1][y - 1] != ' ') {
+            return 1;//valid selection
+        }
+        else
+        {
+            printf("Nao ha nenhuma unidade nessa posicao. Escolha novamente!\n");
+        }
+    }
+    else
+    {
+        printf("Posicao invalida. Escolha novamente!\n");
+    }
+    return 0;//invalid selection
+
+    //displayUnitActions();
+
+}
+
+//function to display the unit actions after being select
+//void displayUnitActions() {
+//
+//    printf("\nAcoes disponiveis para a unidade:\n");
+//    printf("1. Mover\n");
+//    printf("2. Atacar\n");
+//    printf("3. Voltar\n");
+//
+//}
+
+
 int main() {
     menu();
 
@@ -242,7 +285,7 @@ int main() {
             posicionar();
             break;
         case 2:
-            // Select unit
+            selecionar();
             break;
         case 3:
             // Move unit
