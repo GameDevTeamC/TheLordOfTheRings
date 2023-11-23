@@ -239,10 +239,12 @@ void buildingsmenu(){ //show buildings for position
 void selecionar()
 {
     char grid[16][26];
-    int x, y;
+    int x;
+    char y;
 
+    getchar();
     printf("Selecione a posiçao da unidade (linha e coluna): ");
-    scanf("%d %d", &x, &y);
+    scanf("%d %c", &x, &y);
 
     //checks if the selected position is within the grid bounds
     if (x >= 1 && x <= GRID_HEIGHT && y >= 1 && y <= GRID_WIDTH)
