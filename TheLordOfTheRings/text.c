@@ -39,6 +39,9 @@
 //array for table positions
 char grid[16][26];
 
+//for not clean the table every time menu open
+int startverify = 0;
+
 //clean array table
 void cleantable() {
     for (int u = 0; u < 16;u++) {
@@ -66,7 +69,11 @@ void menu() {
     int playerchoice;
 
     // clean display array
-    cleantable();
+    if (startverify == 0)
+    {
+        cleantable();
+        startverify++;
+    }
 
     // define values
     grid[3][9] = 'F';
@@ -77,9 +84,9 @@ void menu() {
 Startmenu:
     printf("Bem-Vindo ao Ring World!\n\n");
 
-    printf("1. Começar um Novo Jogo\n");
+    printf("1. Come%car um Novo Jogo\n",128);
     printf("2. Carregar Jogo\n");
-    printf("3. Defenições\n");
+    printf("3. Defeni%c%ces\n",128,228);
     printf("4. Sair\n\n");
     printf("Introduza a sua escolha (1-4): ");
     scanf("%d", &choice);
@@ -89,7 +96,7 @@ Startmenu:
     {
     case 1:
         system("cls");
-        printf("\nComeçando um novo Jogo ...\n");     
+        printf("\nCome%cando um novo Jogo ...\n",128);     
         Sleep(2000);
         printf("Escolha o seu lado:\n");
         printf("1. Gondor/Rivendell\n");
@@ -99,12 +106,12 @@ Startmenu:
         switch (playerchoice) {
         case 1:
             system("cls");
-            printf("Voce escolheu Gondor/Rivendell. Vamos começar o jogo!\n");
+            printf("Voce escolheu Gondor/Rivendell. Vamos come%car o jogo!\n",128);
             Sleep(2000);
             break;
         case 2:
             system("cls");
-            printf("Voce escolheu Mordor. Vamos começar o jogo!\n");
+            printf("Voce escolheu Mordor. Vamos come%car o jogo!\n",128);
             Sleep(2000);
             break;
         default:
@@ -123,18 +130,19 @@ Startmenu:
 
     case 3:
         system("cls");
-        printf("\nAcessando as defenições ... \n");
+        printf("\nAcessando as defeni%c%ces ... \n",128,228);
         Sleep(2000);
         break;
 
     case 4:
         system("cls");
-        printf("\nSaindo do Ring World. Até á proxima!\n");
+        printf("\nSaindo do Ring World. At%c %c proxima!\n",130,133);
+        //system.Exit();
         Sleep(2000);
         break;
 
     default:
-        printf("\nEscolha inválida, por favor selecione um número entre 1-4!\n");
+        printf("\nEscolha inv%clida, por favor selecione um nï¿½mero entre 1-4!\n");
         Sleep(2000);
         goto Startmenu;
         break;
@@ -149,21 +157,31 @@ void displayGrid(Unit* units, int numUnits, Building* buildings, int numBuilding
 void displayActions();
 
 // Function to position the buildings
-void posicionar(){ 
+void posicionar(char grid_a[16][26]){
     char numpos, letrapos, carater;
-    getchar();
+    numpos = getchar();
     printf("\nSelecione a posicao:\nNumero >> ");
     scanf("%c", &numpos);
-    getchar();
+    letrapos = getchar(); 
     printf("\nLetra >> ");
     scanf("%c", &letrapos);
     printf("Bota ai o que tu queres posicionar: ");
-    getchar();
+    carater = getchar(); 
     scanf("%c", &carater);
-    grid[numpos - 1][letrapos - 96] = carater;
+    numpos -= 1;
+    letrapos -= 97;
+    return grid_a[numpos][letrapos] = carater;
+    
 }
+void buildingsmenu(){ //show buildings for position
+    printf("\nConstru%c%ces:\nBase == (30cc)\nMina == (20cc)\nQuartel == (25cc)\nEst%cbulos == (25cc)\nArsenal == (30cc)", 135, 228,181);
+    printf("\nTropas:\nInfantaria == (10cc)\nCavalaria == (15cc)\nArtilharia == (20cc)\n");
+}
+
+
 int main() {
     menu();
+    
 
     int currentPlayer = 1;
     int castarCoins[2] = { INITIAL_CASTAR_COINS, INITIAL_CASTAR_COINS };
@@ -187,7 +205,8 @@ int main() {
 
         switch (choice) {
         case 1:
-            posicionar();
+            buildingsmenu();
+            posicionar(grid);
             break;
         case 2:
             // Select unit
@@ -204,7 +223,7 @@ int main() {
             currentPlayer = (currentPlayer % 2) + 1;
             break;
         default:
-            printf("Opção Inválida. Escolher outra vez.\n");
+            printf("Opï¿½ï¿½o Invï¿½lida. Escolher outra vez.\n");
         }
     }
 
@@ -293,7 +312,7 @@ void displayGrid(Unit* units, int numUnits, Building* buildings, int numBuilding
 
 void displayActions() {
     // Display available actions for the player
-    printf("1. Posicionar Construção\n");
+    printf("1. Posicionar Construï¿½ï¿½o\n");
     printf("2. Selecionar Unidade\n");
     printf("3. Mover Unidade\n");
     printf("4. Atacar\n");
