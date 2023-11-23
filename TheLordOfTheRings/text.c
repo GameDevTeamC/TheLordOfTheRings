@@ -51,6 +51,58 @@ void cleantable() {
     }
 }
 
+//struct info for the player side
+struct PlayerClass {
+    int id;
+    char name[100];
+};
+
+//struct info player
+struct Player {
+    struct PlayerClass playerClass;
+
+    int id;
+    int coins;
+};
+
+
+//struct info for the building type
+struct BuildingType {
+    int id;
+    int buyCost;
+    int moveCost;
+    int health;
+};
+
+//struct building
+struct Builing {
+    struct BuildingType buildingtype;
+
+    int id;
+    char name[100];
+    int x, y;
+};
+
+//struct info for the unit type
+struct UnitType {
+    int id;
+    int buyCost;
+    int moveCost;
+    int health;
+    int attackPower;
+};
+
+//struct unit type
+struct Unit
+{
+    struct UnitType unittype;
+
+    int id;
+    char name[100];
+    int x, y;
+};
+
+
 // Structure unit
 typedef struct {
     int x, y;
@@ -319,62 +371,6 @@ void displayActions() {
     printf("5. Encerrar Turno\n");
 }
 
-void buildings()
-{
-    //bases
-    char Gondor, Mordor;
-    Gondor = "GGGG";
-    Mordor = "MMMM";
 
-    //Mines
-    char Shire, Erebor;
-    Shire = "%c%c", 83, 83;
-    Erebor = "%c%c", 69, 69;
-
-    //barracks
-    char Rohan, Isengard;
-    Rohan = "%c%c", 82, 82;
-    Isengard = "%c%c", 73, 73;
-
-    //stables
-    char Lothlorien, Mirkwood;
-    Lothlorien = "%c%c", 76, 76;
-    Mirkwood = "%c%c", 77, 77;
-
-    //Armoury
-    char GondorianForge, DarkForge;
-    GondorianForge = "%c%c", 71, 70;
-    DarkForge = "%c%c", 68, 70;
-}
-
-void MovingMilitaryGondorRivendell()
-{
-    //infantry
-    char GondorianGuards;
-    GondorianGuards = "%c", 71;
-
-    //Cavalry
-    char SwanKnights;
-    SwanKnights = "%c%c", 83, 75;
-
-    //Artillery
-    char Trebuchets;
-    Trebuchets = "%c", 84;
-}
-
-void MovingMilitaryMordor()
-{
-    //infatry
-    char OrcWarriors;
-    OrcWarriors = "%c%c", 79, 87;
-
-    //cavalry
-    char Wargs;
-    Wargs = "%c", 87;
-
-    //artillery
-    char SiegeTowers;
-    SiegeTowers = "%c%c", 83, 84;
-}
 
 
