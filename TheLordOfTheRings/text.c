@@ -266,20 +266,26 @@ void selecionar()
         printf("Posi%c%co inv%clida. Escolha novamente!\n",'ç','ã','á');
     }
     return 0;//invalid selection
-
-    //displayUnitActions();
-
 }
 
 //function to display the unit actions after being select
 void displayUnitActions() {
 
-    printf("\nA%c%ces disponiveis para a unidade:\n",'ç','õ');
+    printf("\nAcoes disponiveis para a unidade:\n");
     printf("1. Mover\n");
     printf("2. Atacar\n");
     printf("3. Voltar\n");
-
 }
+
+//function to display the unit actions after being select
+//void displayUnitActions() {
+//
+//    printf("\nAcoes disponiveis para a unidade:\n");
+//    printf("1. Mover\n");
+//    printf("2. Atacar\n");
+//    printf("3. Voltar\n");
+//
+//}
 
 
 int main() {
@@ -316,6 +322,9 @@ int main() {
         case 2:
 
             selecionar();
+            system("cls");
+            displayGrid(units, 2, buildings, 2);
+            displayUnitActions();
             break;
         case 3:
             // Move unit
