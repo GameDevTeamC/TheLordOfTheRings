@@ -231,8 +231,8 @@ void posicionar(char grid_a[16][26]) {
 }
 
 void buildingsmenu(){ //show buildings for position
-    printf("\nConstru%c%ces:\nBase == (%d)\nMina == (%d)\nQuartel == (25cc)\nEst%cbulos == (25cc)\nArsenal == (30cc)", 135, 228,181);
-    printf("\nTropas:\nInfantaria == (%d)\nCavalaria == (%d)\nArtilharia == (20cc)\n");
+    printf("\nConstru%c%ces:\nBase == (%dcc)\nMina == (%dcc)\nQuartel == (%dcc)\nEst%cbulos == (%dcc)\nArsenal == (%dcc)", 135, 228, BASE_COST, MINE_COST, BARRACKS_COST, 181, STABLES_COST, ARMOURY_COST);
+    printf("\nTropas:\nInfantaria == (%dcc)\nCavalaria == (%dcc)\nArtilharia == (%dcc)\n", INFANTRY_COST, CAVALRY_COST,ARTILLERY_COST);
 }
 
 
