@@ -209,23 +209,79 @@ void displayGrid(Unit* units, int numUnits, Building* buildings, int numBuilding
 void displayActions();
 
 //show buildings for position
-void buildingsmenu() { 
-    printf("\nConstru%c%ces:\nBase == (%dcc)\nMina == (%dcc)\nQuartel == (%dcc)\nEst%cbulos == (%dcc)\nArsenal == (%dcc)", 135, 228, BASE_COST, MINE_COST, BARRACKS_COST, 181, STABLES_COST, ARMOURY_COST);
-    printf("\nTropas:\nInfantaria == (%dcc)\nCavalaria == (%dcc)\nArtilharia == (%dcc)\n", INFANTRY_COST, CAVALRY_COST, ARTILLERY_COST);
-}
+char buildingsmenu() { 
+    int choosing,escolha;
+    char carater=0;
 
+    buildingmenu:
+    printf("O que deseja posicionar ?\n1: Constru%c%ces\n2: Tropas\nOp%c%co",'ç','õ','ç','ã');
+    scanf("%d", &choosing);
+    if (choosing == 1) {
+        printf("\n1:Base == (%dcc)\n2:Mina == (%dcc)\n3:Quartel == (%dcc)\n4:Est%cbulos == (%dcc)\n5:Arsenal == (%dcc)\n >>", BASE_COST, MINE_COST, BARRACKS_COST, 181, STABLES_COST, ARMOURY_COST);
+        scanf("%d", &escolha);
+        switch (escolha) {
+        case 1:
+            carater = 'G';
+            break;
+        case 2:
+            carater = 'M';
+            break;
+        case 3:
+            carater = 'Q';
+            break;
+        case 4:
+            carater = 'E';
+            break;
+        case 5:
+            carater = 'A';
+            break;
+        default:
+            printf("Escolha invalida.");
+            goto buildingmenu;
+            break;
+        }
+    }
+    else if (choosing == 2) {
+        printf("\n1:Infantaria == (%dcc)\n2:Cavalaria == (%dcc)\n3:Artilharia == (%dcc)\n >>", INFANTRY_COST, CAVALRY_COST, ARTILLERY_COST);
+        scanf("%d", &escolha);
+        switch (escolha) {
+        case 1:
+            carater = 'I';
+            break;
+        case 2:
+            carater = 'C';
+            break;
+        case 3:
+            carater = 'a';
+            break;
+        default:
+            printf("Escolha invalida.");
+            goto buildingmenu;
+            break;
+        }
+    }
+    else { 
+        printf("Escolha inv%clida.", 'á');
+        goto buildingmenu;
+    }
+    return carater;
+}
 // Function to position the buildings
 void posicionar(char grid_a[16][26]) {
-    
     char letrapos, carater;
     int numpos;
+
+    carater = buildingsmenu();
+
     selectnumpos:
     printf("\nSelecione a posicao:\nNumero >> ");
     scanf("%d", &numpos);
+
     if (numpos > 16 || numpos < 0)
     {
         goto selectnumpos;
     }
+
     selectletrapos:
     getchar();
     printf("\nLetra >> ");
@@ -234,12 +290,10 @@ void posicionar(char grid_a[16][26]) {
     {
         goto selectletrapos;
     }
-    getchar();
-    printf("Bota ai o que tu queres posicionar: ");
-    scanf("%c", &carater);
 
     numpos -= 1;
     letrapos -= 97;
+    //falta parte para posicionar na tabela
     grid_a[numpos][letrapos] = carater;
 }
 
@@ -312,7 +366,6 @@ int main() {
         case 1:
             system("cls");
             displayGrid(units, 2, buildings, 2);
-            buildingsmenu();
             posicionar(grid);
             break;
         case 2:
