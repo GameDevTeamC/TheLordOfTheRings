@@ -182,19 +182,19 @@ Startmenu:
 
     case 3:
         system("cls");
-        printf("\nAcessando as defeni%c%ces ... \n",128,228);
+        printf("\nAcessando as defeni%c%ces ... \n", 'ç','õ');
         Sleep(2000);
         break;
 
     case 4:
         system("cls");
-        printf("\nSaindo do Ring World. At%c %c proxima!\n",130,133);
+        printf("\nSaindo do Ring World. At%c %c proxima!\n",'é','à');
         //system.Exit();
         Sleep(2000);
         break;
 
     default:
-        printf("\nEscolha inv%clida, por favor selecione um n�mero entre 1-4!\n");
+        printf("\nEscolha inv%clida, por favor selecione um n�mero entre 1-4!\n",'á');
         Sleep(2000);
         goto Startmenu;
         break;
@@ -208,19 +208,32 @@ void displayGrid(Unit* units, int numUnits, Building* buildings, int numBuilding
 // Function to display available actions
 void displayActions();
 
+//show buildings for position
+void buildingsmenu() { 
+    printf("\nConstru%c%ces:\nBase == (%dcc)\nMina == (%dcc)\nQuartel == (%dcc)\nEst%cbulos == (%dcc)\nArsenal == (%dcc)", 135, 228, BASE_COST, MINE_COST, BARRACKS_COST, 181, STABLES_COST, ARMOURY_COST);
+    printf("\nTropas:\nInfantaria == (%dcc)\nCavalaria == (%dcc)\nArtilharia == (%dcc)\n", INFANTRY_COST, CAVALRY_COST, ARTILLERY_COST);
+}
+
 // Function to position the buildings
 void posicionar(char grid_a[16][26]) {
     
     char letrapos, carater;
     int numpos;
-
+    selectnumpos:
     printf("\nSelecione a posicao:\nNumero >> ");
     scanf("%d", &numpos);
-
+    if (numpos > 16 || numpos < 0)
+    {
+        goto selectnumpos;
+    }
+    selectletrapos:
     getchar();
     printf("\nLetra >> ");
     scanf("%c", &letrapos);
-
+    if (letrapos > 122 || letrapos < 97)
+    {
+        goto selectletrapos;
+    }
     getchar();
     printf("Bota ai o que tu queres posicionar: ");
     scanf("%c", &carater);
@@ -230,10 +243,7 @@ void posicionar(char grid_a[16][26]) {
     grid_a[numpos][letrapos] = carater;
 }
 
-void buildingsmenu(){ //show buildings for position
-    printf("\nConstru%c%ces:\nBase == (%dcc)\nMina == (%dcc)\nQuartel == (%dcc)\nEst%cbulos == (%dcc)\nArsenal == (%dcc)", 135, 228, BASE_COST, MINE_COST, BARRACKS_COST, 181, STABLES_COST, ARMOURY_COST);
-    printf("\nTropas:\nInfantaria == (%dcc)\nCavalaria == (%dcc)\nArtilharia == (%dcc)\n", INFANTRY_COST, CAVALRY_COST,ARTILLERY_COST);
-}
+
 
 //function to select a unit from the grid
 void selecionar()
@@ -243,7 +253,7 @@ void selecionar()
     char y;
 
     getchar();
-    printf("Selecione a posiçao da unidade (linha e coluna): ");
+    printf("Selecione a posi%c%co da unidade (linha e coluna): ",'ç','ã');
     scanf("%d %c", &x, &y);
 
     //checks if the selected position is within the grid bounds
@@ -255,12 +265,12 @@ void selecionar()
         }
         else
         {
-            printf("Nao ha nenhuma unidade nessa posicao. Escolha novamente!\n");
+            printf("N%co h%c nenhuma unidade nessa posicao. Escolha novamente!\n",'ã','á');
         }
     }
     else
     {
-        printf("Posicao invalida. Escolha novamente!\n");
+        printf("Posi%c%co inv%clida. Escolha novamente!\n",'ç','ã','á');
     }
     return 0;//invalid selection
 }
@@ -319,7 +329,7 @@ int main() {
         displayActions();
 
         int choice;
-        printf("Op%c%co:", 135, 198);
+        printf("Op%c%co:",'ç','ã');
         scanf("%d", &choice);
 
        
@@ -332,6 +342,7 @@ int main() {
             posicionar(grid);
             break;
         case 2:
+
             selecionar();
             system("cls");
             displayGrid(units, 2, buildings, 2);
