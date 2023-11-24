@@ -338,6 +338,32 @@ void displayUnitActions() {
     printf("3. Voltar\n");
 }
 
+void handleUnitActions() {
+    int actionChoice;
+
+    while (1)
+    {
+        displayUnitActions();
+
+        printf("Escolha uma açao (1-3): ");
+        scanf("%d", &actionChoice);
+
+        switch (actionChoice)
+        {
+        case 1 :
+
+        case 2:
+
+        case 3:
+
+
+        default:
+            break;
+        }
+    }
+}
+
+
 int main() {
     menu();
     
