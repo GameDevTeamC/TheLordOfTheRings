@@ -113,7 +113,7 @@ typedef struct {
 typedef struct {
     int x, y;
 } Building;
-
+//jbgjg
 //Start Menu
 void menu() {
     //variables
