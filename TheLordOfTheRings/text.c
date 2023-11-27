@@ -60,34 +60,26 @@ typedef struct {
     char name[100];
 } PlayerClass;
 
-
-
 //struct info player
 typedef struct {
     int id;
     int coins;
+    PlayerClass playerClass
 } Player;
-
-Player player;
-
 
 //struct info for the building type
 typedef struct {
     int id;
     int buyCost;
-    int moveCost;
     int health;
 } BuildingType;
 
 //struct building
 typedef struct {
-
     int id;
     char name[100];
     int x, y;
 } Building;
-
-Building building;
 
 //struct info for the unit type
 typedef struct {
@@ -106,7 +98,18 @@ typedef struct
     int x, y;
 } Unit;
 
+PlayerClass playerClass[] = {
+    {1, "Gondor"},
+    {2, "Mordor"}
+};
 
+BuildingType buildingType[] = {
+    {1, 30, 100},
+    {2, 20, 50},
+    {3, 25, 70},
+    {4, 25, 70},
+    {5, 30, 70},
+};
 
 // declarate functions
 void displayGrid();
@@ -547,8 +550,8 @@ void move(char grid[16][26], int playerchoice, int postition[1][1])
 }
 
 int main() {
-    menu();
 
+    menu();
 
     int currentPlayer = 1;
     int castarCoins[2] = { INITIAL_CASTAR_COINS, INITIAL_CASTAR_COINS };
