@@ -338,6 +338,61 @@ void displayUnitActions() {
     printf("3. Voltar\n");
 }
 
+void move(char grid[16][26])
+{
+    struct Player* player;
+    int x;
+    int new_x = 0;
+    char new_y;
+    char y;
+
+    printf("Digite a nova posicao da unidade selecionada (linha e coluna): ");
+    scanf("%d %c", &new_x, &new_y);
+
+    if (new_x >= 1 && new_x <= GRID_HEIGHT && new_y >= 1 && new_y <= GRID_WIDTH) {
+        // Check if the new position is empty
+        if (grid[new_x - 1][new_y - 1] == ' ') {
+            // Determine the movement cost based on the type of unit
+            int movementCost;
+            switch (grid[x - 1][y - 1]) {
+            case 'I': // Infantry
+                movementCost = INFANTRY_MOVEMENT_COST;
+                break;
+            case 'C': // Cavalry
+                movementCost = CAVALRY_MOVEMENT_COST;
+                break;
+            case 'A': // Artillery
+                movementCost = ARTILLERY_MOVEMENT_COST;
+                break;
+            default:
+                movementCost = 0; // Default cost for unknown units
+            }
+
+            // Check if the player has enough coins to cover the movement cost
+            if (player->coins >= movementCost) {
+                // Move the unit to the new position
+                grid[new_x - 1][new_y - 1] = grid[x - 1][y - 1];
+                grid[x - 1][y - 1] = ' ';
+
+                // Deduct the movement cost from the player's coins
+                player->coins -= movementCost;
+
+                printf("Unidade movida com sucesso para %d, %d. Custo de movimento: %d coins\n", new_x, new_y, movementCost);
+            }
+            else {
+                printf("Saldo insuficiente. Nao e possível mover a unidade para %d, %d.\n", new_x, new_y);
+            }
+        }
+        else {
+            printf("Posicao ocupada. Escolha uma posição valida.\n");
+        }
+    }
+    else {
+        printf("Posicao invalida. Escolha uma posicao dentro dos limites do tabuleiro.\n");
+    }
+    return grid;
+}
+
 void handleUnitActions() {
     int actionChoice;
 
@@ -350,14 +405,17 @@ void handleUnitActions() {
 
         switch (actionChoice)
         {
+            //movement
         case 1 :
-
+            move();
+            //atack
         case 2:
-
+            //voltar
         case 3:
 
 
         default:
+            printf("Opcao invalida. Selecione outra opcao.");
             break;
         }
     }
@@ -403,6 +461,7 @@ int main() {
             break;
         case 3:
             // Move unit
+            move(grid[16][26]);
             break;
         case 4:
             // Attack
