@@ -112,16 +112,23 @@ typedef struct {
     int movementRange;
 } Unit;
 
-// Structure building
-typedef struct {
-    int x, y;
-} Building;
-//jbgjg
+// Function to display the game grid
+void displayGrid(Unit* units, int numUnits, Building* buildings, int numBuildings);
+
+// Function to display available actions
+void displayActions();
+void posicionar(char grid[16][26]);
+int* selecionar(char grid[16][26]);
+void handleUnitActions(char grid[16][26], int playerchoice);
+void move(char grid[16][26], int playerchoice);
+void cleantable();
+void menu();
+void displayUnitActions();
+
 //Start Menu
 void menu() {
     //variables
     int choice;
-    
 
     // clean display array
     if (startverify == 0)
@@ -133,7 +140,6 @@ void menu() {
     // define values
     grid[3][9] = 'F';
     grid[8][3] = 'A';
-
 
     //start menu
 Startmenu:
