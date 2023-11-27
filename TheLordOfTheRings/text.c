@@ -225,10 +225,10 @@ buildingmenu:
         scanf("%d", &escolha);
         switch (escolha) {
         case 1:
-            carater = 'B';
+            carater = 'B';//base
             break;
         case 2:
-            carater = 'M';
+            carater = 'M';//
             break;
         case 3:
             carater = 'Q';
