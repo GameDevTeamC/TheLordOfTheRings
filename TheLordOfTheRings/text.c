@@ -64,8 +64,10 @@ typedef struct {
 typedef struct {
     int id;
     int coins;
-    PlayerClass playerClass
+    PlayerClass playerClass;
 } Player;
+
+Player player;
 
 //struct info for the building type
 typedef struct {
