@@ -42,6 +42,9 @@ char grid[16][26];
 //for not clean the table every time menu open
 int startverify = 0;
 
+//player team definer
+int playerchoice;
+
 //clean array table
 void cleantable() {
     for (int u = 0; u < 16;u++) {
@@ -118,7 +121,7 @@ typedef struct {
 void menu() {
     //variables
     int choice;
-    int playerchoice;
+    
 
     // clean display array
     if (startverify == 0)
@@ -221,7 +224,7 @@ char buildingsmenu() {
         scanf("%d", &escolha);
         switch (escolha) {
         case 1:
-            carater = 'G';
+            carater = 'B';
             break;
         case 2:
             carater = 'M';
@@ -290,11 +293,126 @@ void posicionar(char grid_a[16][26]) {
     {
         goto selectletrapos;
     }
-
+    
     numpos -= 1;
     letrapos -= 97;
-    //falta parte para posicionar na tabela
-    grid_a[numpos][letrapos] = carater;
+
+    //placing int the table 
+    if (playerchoice == 1 ) {//Gondor/Rivendell
+        switch (carater) {
+        case 'B'://base Gondor (GGGG)
+            if (letrapos <= 21) {
+                grid_a[numpos][letrapos] = 'G';
+                grid_a[numpos][++letrapos] = 'G';
+                grid_a[numpos][++letrapos] = 'G';
+                grid_a[numpos][++letrapos] = 'G';
+            }
+            else { goto selectnumpos; }
+            break;
+        case 'M'://mine Shire (SS)
+            if (letrapos <= 23) {
+                grid_a[numpos][letrapos] = 'S';
+                grid_a[numpos][++letrapos] = 'S';
+            }
+            else { goto selectnumpos; }
+            break;
+        case 'Q'://barracks Rohan (RR)
+            if (letrapos <= 23) {
+                grid_a[numpos][letrapos] = 'R';
+                grid_a[numpos][++letrapos] = 'R';
+            }
+            else { goto selectnumpos; }
+            break;
+        case 'E'://stables Lothlórien (LL)
+            if (letrapos <= 23) {
+                grid_a[numpos][letrapos] = 'L';
+                grid_a[numpos][++letrapos] = 'L';
+            }
+            else { goto selectnumpos; }
+            break;
+        case'A'://armoury Gondorian Forge (GF)
+            if (letrapos <= 23) {
+                grid_a[numpos][letrapos] = 'G';
+                grid_a[numpos][++letrapos] = 'F';
+            }
+            else { goto selectnumpos; }
+            break;
+        case 'I'://infantry Gondorian Guards (G)
+            grid_a[numpos][letrapos] = 'G';
+            break;
+        case 'C'://cavalry Swan-Knights (SK)
+            if (letrapos <= 23) {
+                grid_a[numpos][letrapos] = 'S';
+                grid_a[numpos][++letrapos] = 'K';
+            }
+            else { goto selectnumpos; }
+            break;
+        case 'a'://artillery Trebuchets (T)
+                grid_a[numpos][letrapos] = 'T';  
+            break;
+        }
+    }
+
+
+    else if (playerchoice == 2) {//Mordor
+        switch (carater) {
+        case 'B'://base Mordor (MMMM)
+            if (letrapos <= 21) {
+                grid_a[numpos][letrapos] = 'M';
+                grid_a[numpos][++letrapos] = 'M';
+                grid_a[numpos][++letrapos] = 'M';
+                grid_a[numpos][++letrapos] = 'M';
+            }
+            else { goto selectnumpos; }
+            break;
+        case 'M'://mine Erebor (EE)
+            if (letrapos <= 23) {
+                grid_a[numpos][letrapos] = 'E';
+                grid_a[numpos][++letrapos] = 'E';
+            }
+            else { goto selectnumpos; }
+            break;
+        case 'Q'://barracks Isengard (II)
+            if (letrapos <= 23) {
+                grid_a[numpos][letrapos] = 'I';
+                grid_a[numpos][++letrapos] = 'I';
+            }
+            else { goto selectnumpos; }
+            break;
+        case 'E'://stables Mirkwood (MK)
+            if (letrapos <= 23) {
+                grid_a[numpos][letrapos] = 'M';
+                grid_a[numpos][++letrapos] = 'K';
+            }
+            else { goto selectnumpos; }
+            break;
+        case'A'://armoury Dark Foegw (DF)
+            if (letrapos <= 23) {
+                grid_a[numpos][letrapos] = 'D';
+                grid_a[numpos][++letrapos] = 'F';
+            }
+            else { goto selectnumpos; }
+            break;
+        case 'I'://infantary Orc Warrior (OW)
+            if (letrapos <= 23) {
+                grid_a[numpos][letrapos] = 'O';
+                grid_a[numpos][++letrapos] = 'W';
+            }
+            else { goto selectnumpos; }
+            break;
+        case 'C'://cavalry Wargs (W)
+            grid_a[numpos][letrapos] = 'W';
+            break;
+        case 'a'://artillery Siege Towers (ST)
+            if (letrapos <= 23) {
+                grid_a[numpos][letrapos] = 'S';
+                grid_a[numpos][++letrapos] = 'T';
+            }
+            else { goto selectnumpos; }
+            break;
+        }
+    }
+    
 }
 
 
@@ -410,7 +528,8 @@ int main() {
         case 5:
             // End turn
             // Switch players
-            currentPlayer = (currentPlayer % 2) + 1;
+            if (playerchoice == 1) { playerchoice = 2; }
+            else if (playerchoice == 2) { playerchoice = 1; }
             break;
         default:
             printf("Op��o Inv�lida. Escolher outra vez.\n");
