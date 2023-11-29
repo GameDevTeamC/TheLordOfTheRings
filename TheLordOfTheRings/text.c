@@ -203,10 +203,10 @@ char buildingsmenu() {
     char carater = 0;
 
 buildingmenu:
-    printf("O que deseja posicionar ?\n1: Construções\n2: Tropas\nOpção");
+    printf("O que deseja posicionar ?\n1: Constru%c%ces\n2: Tropas\n >> ",135,228);
     scanf("%d", &choosing);
     if (choosing == 1) {
-        printf("\n1:Base == (%dcc)\n2:Mina == (%dcc)\n3:Quartel == (%dcc)\n4:Estábulos == (%dcc)\n5:Arsenal == (%dcc)\n >>", BASE_COST, MINE_COST, BARRACKS_COST, STABLES_COST, ARMOURY_COST);
+        printf("\n1:Base == (%dcc)\n2:Mina == (%dcc)\n3:Quartel == (%dcc)\n4:Est%cbulos == (%dcc)\n5:Arsenal == (%dcc)\n >> ", BASE_COST, MINE_COST, BARRACKS_COST,160, STABLES_COST, ARMOURY_COST);
         scanf("%d", &escolha);
         switch (escolha) {
         case 1:
@@ -225,7 +225,7 @@ buildingmenu:
             carater = 'A';//armoury
             break;
         default:
-            printf("Escolha invalida.");
+            printf("Escolha inv%clida.",160);
             goto buildingmenu;
             break;
         }
@@ -244,13 +244,13 @@ buildingmenu:
             carater = 'a';//artilry
             break;
         default:
-            printf("Escolha invalida.");
+            printf("Escolha inv%clida.",160);
             goto buildingmenu;
             break;
         }
     }
     else {
-        printf("Escolha inv%clida.", 'á');
+        printf("Escolha inv%clida.", 160);
         goto buildingmenu;
     }
     return carater;
@@ -263,7 +263,7 @@ void posicionar(char grid_a[16][26]) {
     carater = buildingsmenu();
 
 selectnumpos:
-    printf("\nSelecione a posicao:\nNumero >> ");
+    printf("\nSelecione a posi%c%co:\nN%cmero >> ",135,198,163);
     scanf("%d", &numpos);
 
     if (numpos > 16 || numpos < 0)
@@ -411,7 +411,7 @@ int* selecionar(char grid[16][26])
     char position[1][1];
 
     getchar();
-    printf("Selecione a posi%c%co da unidade (linha e coluna): ", 'ç', 'ã');
+    printf("Selecione a posi%c%co da unidade (linha e coluna): ", 135,198);
     scanf("%d %c", &x, &y);
 
     //checks if the selected position is within the grid bounds
@@ -425,12 +425,12 @@ int* selecionar(char grid[16][26])
         }
         else
         {
-            printf("N%co h%c nenhuma unidade nessa posicao. Escolha novamente!\n", 'ã', 'á');
+            printf("N%co h%c nenhuma unidade nessa posicao. Escolha novamente!\n", 198, 160);
         }
     }
     else
     {
-        printf("Posi%c%co inv%clida. Escolha novamente!\n", 'ç', 'ã', 'á');
+        printf("Posi%c%co inv%clida. Escolha novamente!\n", 135, 198, 160);
     }
     return 0;
 }
@@ -438,7 +438,7 @@ int* selecionar(char grid[16][26])
 //function to display the unit actions after being select
 void displayUnitActions() {
 
-    printf("\nAcoes disponiveis para a unidade:\n");
+    printf("\nA%c%ces disponiveis para a unidade:\n",135,198);
     printf("1. Mover\n");
     printf("2. Atacar\n");
     printf("3. Voltar\n");
@@ -595,14 +595,14 @@ void displayGrid() {
 
 void displayActions() {
     // Display available actions for the player
-    printf("1. Posicionar Constru��o\n");
+    printf("1. Posicionar Constru%c%co\n",135,198);
     printf("2. Selecionar Unidade\n");
     printf("3. Encerrar Turno\n");
 }
 
 int main() {
 	
-    setlocale(LC_ALL, "Portuguese");
+  
 
     //variables
     int currentPlayer = 1;
@@ -667,9 +667,9 @@ int main() {
 Startmenu:
     printf("Bem-Vindo ao Ring World!\n\n");
 
-    printf("1. Come%car um Novo Jogo\n", 128);
+    printf("1. Come%car um Novo Jogo\n", 135);
     printf("2. Carregar Jogo\n");
-    printf("3. Defenições\n");
+    printf("3. Defeni%c%ces\n",135,228);
     printf("4. Sair\n\n");
     printf("Introduza a sua escolha (1-4): ");
     scanf("%d", &choice);
@@ -688,19 +688,19 @@ Startmenu:
         switch (playerchoice) {
         case 1:
             system("cls");
-            printf("Voce escolheu Gondor. Vamos começar o jogo!\n");
+            printf("Voce escolheu Gondor. Vamos come%car o jogo!\n",135);
             playerRegister(playerchoice, playerClass);
             Sleep(2000);
             break;
         case 2:
             system("cls");
-            printf("Voce escolheu Mordor. Vamos começar o jogo!\n");
+            printf("Voce escolheu Mordor. Vamos come%car o jogo!\n",135);
             playerRegister(playerchoice, playerClass);
             Sleep(2000);
             break;
         default:
             system("cls");
-            printf("Escolha inválida, por favor selecione o seu lado.\n");
+            printf("Escolha inv%clida, por favor selecione o seu lado.\n",160);
             Sleep(2000);
             goto Startmenu;
         }
@@ -714,19 +714,19 @@ Startmenu:
 
     case 3:
         system("cls");
-        printf("\nAcessando as defenições ... \n");
+        printf("\nAcessando as defeni%c%ces ... \n",135,228);
         Sleep(2000);
         break;
 
     case 4:
         system("cls");
-        printf("\nA sair do Ring World. Até à proxima!\n");
+        printf("\nA sair do Ring World. At%c %c pr%cxima!\n",130,133,162);
         saveGameToFile(players, "save1" SAVE_FILE_EXTENSION);
         Sleep(2000);
         break;
 
     default:
-        printf("\nEscolha inválida, por favor selecione um n�mero entre 1-4!\n");
+        printf("\nEscolha inv%clida, por favor selecione um n%cmero entre 1-4!\n",160,163);
         Sleep(2000);
         goto Startmenu;
         break;
@@ -745,7 +745,7 @@ Startmenu:
 
         displayActions();
 
-        printf("Op%c%co:", 'ç', 'ã');
+        printf("Op%c%co:", 135, 198);
         scanf("%d", &choice);
 
         switch (choice) {
@@ -768,12 +768,12 @@ Startmenu:
             break;
         case 4:
             system("cls");
-            printf("\nA sair do Ring World. Até à proxima!\n");
+            printf("\nA sair do Ring World. At%c %c pr%cxima!\n",130,133,162);
             saveGameToFile(players, "save1" SAVE_FILE_EXTENSION);
             Sleep(2000);
             break;
         default:
-            printf("Op��o Inv�lida. Escolher outra vez.\n");
+            printf("Op%c%co Inv%clida. Escolher outra vez.\n",135,198,160);
         }
     }
 
