@@ -27,6 +27,8 @@
 #define INFANTRY_HEALTH 30
 #define CAVALRY_HEALTH 40
 #define ARTILLERY_HEALTH 20
+//file
+#define SAVE_FILE_EXTENSION ".txt"
 //Librarys
 #include <stdio.h>
 #include <stdlib.h>
@@ -55,162 +57,142 @@ void cleantable() {
 }
 
 //struct info for the player side
-typedef struct {
+struct PlayerClass {
     int id;
     char name[100];
-} PlayerClass;
+};
 
 //struct info player
-typedef struct {
+struct Player {
     int id;
     int coins;
-    PlayerClass playerClass
-} Player;
+    struct PlayerClass playerClass;
+};
+
+struct Player players[2];
 
 //struct info for the building type
-typedef struct {
+struct BuildingType {
     int id;
     int buyCost;
     int health;
-} BuildingType;
+};
 
 //struct building
-typedef struct {
+struct Building {
     int id;
     char name[100];
     int x, y;
-} Building;
+};
+
+//struct unit type
+struct Unit
+{
+    int id;
+    char name[100];
+    char code[100];
+    struct PlayerClass playerclass;
+};
 
 //struct info for the unit type
-typedef struct {
+struct UnitType {
     int id;
     int buyCost;
     int moveCost;
     int health;
     int attackPower;
-} UnitType;
-
-//struct unit type
-typedef struct
-{
-    int id;
-    char name[100];
-    int x, y;
-} Unit;
-
-PlayerClass playerClass[] = {
-    {1, "Gondor"},
-    {2, "Mordor"}
 };
 
-BuildingType buildingType[] = {
-    {1, 30, 100},
-    {2, 20, 50},
-    {3, 25, 70},
-    {4, 25, 70},
-    {5, 30, 70},
+struct GameState {
+    char gameName[100];
+    struct Player players[2];
 };
 
 // declarate functions
+void cleantable();
 void displayGrid();
 void displayActions();
 void posicionar(char grid[16][26]);
 int* selecionar(char grid[16][26]);
-void handleUnitActions(char grid[16][26], int playerchoice);
-void move(char grid[16][26], int playerchoice);
-void cleantable();
-void menu();
-void displayUnitActions();
+void saveGameToFile(struct Player players[2], const char* saveFileName);
+void loadGameFromFile(struct Player players[2], const char* loadFileName);
+void playerRegister(int option, struct PlayerClass playerClass[]);
+
+void saveGameToFile(struct Player players[2], const char* saveFileName) {
+    FILE* file = fopen(saveFileName, "wb");
+
+    if (file != NULL) {
+        // Save player data
+        for (int i = 0; i < 2; ++i) {
+            fprintf(file, "Player %d:\n", i + 1);
+            fprintf(file, "  ID: %d\n", players[i].id);
+            fprintf(file, "  Coins: %d\n", players[i].coins);
+            fprintf(file, "  Player Class:\n");
+            fprintf(file, "    ID: %d\n", players[i].playerClass.id);
+            fprintf(file, "    Name: %s\n", players[i].playerClass.name);
+        }
+
+        fclose(file);
+        printf("Game saved to %s\n", saveFileName);
+    }
+    else {
+        printf("Error opening file for writing.\n");
+    }
+}
+
+// Function to load the game from a file
+void loadGameFromFile(struct Player players[2], const char* loadFileName) {
+    FILE* file = fopen(loadFileName, "rb");
+
+    if (file != NULL) {
+        // Load player data
+        for (int i = 0; i < 2; ++i) {
+            // Assuming the file structure is consistent with the save format
+            fscanf(file, "Player %*d:\n");
+            fscanf(file, "  ID: %d\n", &players[i].id);
+            fscanf(file, "  Coins: %d\n", &players[i].coins);
+            fscanf(file, "  Player Class:\n");
+            fscanf(file, "    ID: %d\n", &players[i].playerClass.id);
+            fscanf(file, "    Name: %s\n", players[i].playerClass.name);
+        }
+
+        fclose(file);
+        printf("Game loaded from %s\n", loadFileName);
+    }
+    else {
+        printf("Error opening file for reading.\n");
+    }
+}
+
+void playerRegister(int option, struct PlayerClass playerClass[]) {
+
+    if (option == 1)
+    {
+        players[0].id = 1;
+        players[0].coins = INITIAL_CASTAR_COINS;
+        players[0].playerClass = playerClass[option - 1];
+        players[1].id = 2;
+        players[1].coins = INITIAL_CASTAR_COINS;
+        players[1].playerClass = playerClass[option];
+    }
+    else {
+        players[0].id = 1;
+        players[0].coins = INITIAL_CASTAR_COINS;
+        players[0].playerClass = playerClass[option - 1];
+        players[1].id = 2;
+        players[1].coins = INITIAL_CASTAR_COINS;
+        players[1].playerClass = playerClass[option-2];
+    }
+}
 
 //Start Menu
 void menu() {
-    //variables
-    int choice;
-
-    // clean display array
-    if (startverify == 0)
-    {
-        cleantable();
-        startverify++;
-    }
-
-    // define values
-    grid[3][9] = 'F';
-    grid[8][3] = 'A';
-
-
-    //start menu
-Startmenu:
-    printf("Bem-Vindo ao Ring World!\n\n");
-
-    printf("1. Come%car um Novo Jogo\n", 128);
-    printf("2. Carregar Jogo\n");
-    printf("3. Defeni%c%ces\n", 128, 228);
-    printf("4. Sair\n\n");
-    printf("Introduza a sua escolha (1-4): ");
-    scanf("%d", &choice);
-
-
-    switch (choice)
-    {
-    case 1:
-        system("cls");
-        printf("\nCome%cando um novo Jogo ...\n", 128);
-        Sleep(2000);
-        printf("Escolha o seu lado:\n");
-        printf("1. Gondor/Rivendell\n");
-        printf("2. Mordor\n");
-        printf("Introduza a sua Escolha (1-2): ");
-        scanf("%d", &playerchoice);
-        switch (playerchoice) {
-        case 1:
-            system("cls");
-            printf("Voce escolheu Gondor/Rivendell. Vamos come%car o jogo!\n", 128);
-            Sleep(2000);
-            break;
-        case 2:
-            system("cls");
-            printf("Voce escolheu Mordor. Vamos come%car o jogo!\n", 128);
-            Sleep(2000);
-            break;
-        default:
-            system("cls");
-            printf("Escolha invalida, por favor selecione o seu lado.\n");
-            Sleep(2000);
-            goto Startmenu;
-        }
-        break;
-
-    case 2:
-        system("cls");
-        printf("\nCarregando o jogo ... ");
-        Sleep(2000);
-        break;
-
-    case 3:
-        system("cls");
-        printf("\nAcessando as defeni%c%ces ... \n", 'ç', 'õ');
-        Sleep(2000);
-        break;
-
-    case 4:
-        system("cls");
-        printf("\nSaindo do Ring World. At%c %c proxima!\n", 'é', 'à');
-        //system.Exit();
-        Sleep(2000);
-        break;
-
-    default:
-        printf("\nEscolha inv%clida, por favor selecione um n�mero entre 1-4!\n", 'á');
-        Sleep(2000);
-        goto Startmenu;
-        break;
-    }
+    
     return 0;
 }
 
 // Function to display the game grid
-void displayGrid(Unit* units, int numUnits, Building* buildings, int numBuildings);
+void displayGrid();
 
 // Function to display available actions
 void displayActions();
@@ -221,26 +203,26 @@ char buildingsmenu() {
     char carater = 0;
 
 buildingmenu:
-    printf("O que deseja posicionar ?\n1: Constru%c%ces\n2: Tropas\nOp%c%co", 'ç', 'õ', 'ç', 'ã');
+    printf("O que deseja posicionar ?\n1: Construções\n2: Tropas\nOpção");
     scanf("%d", &choosing);
     if (choosing == 1) {
-        printf("\n1:Base == (%dcc)\n2:Mina == (%dcc)\n3:Quartel == (%dcc)\n4:Est%cbulos == (%dcc)\n5:Arsenal == (%dcc)\n >>", BASE_COST, MINE_COST, BARRACKS_COST, 181, STABLES_COST, ARMOURY_COST);
+        printf("\n1:Base == (%dcc)\n2:Mina == (%dcc)\n3:Quartel == (%dcc)\n4:Estábulos == (%dcc)\n5:Arsenal == (%dcc)\n >>", BASE_COST, MINE_COST, BARRACKS_COST, STABLES_COST, ARMOURY_COST);
         scanf("%d", &escolha);
         switch (escolha) {
         case 1:
             carater = 'B';//base
             break;
         case 2:
-            carater = 'M';//
+            carater = 'M';//mine
             break;
         case 3:
-            carater = 'Q';
+            carater = 'Q';//barracks
             break;
         case 4:
-            carater = 'E';
+            carater = 'E';//stable
             break;
         case 5:
-            carater = 'A';
+            carater = 'A';//armoury
             break;
         default:
             printf("Escolha invalida.");
@@ -253,13 +235,13 @@ buildingmenu:
         scanf("%d", &escolha);
         switch (escolha) {
         case 1:
-            carater = 'I';
+            carater = 'I';//infantary
             break;
         case 2:
-            carater = 'C';
+            carater = 'C';//cavalry
             break;
         case 3:
-            carater = 'a';
+            carater = 'a';//artilry
             break;
         default:
             printf("Escolha invalida.");
@@ -463,7 +445,7 @@ void displayUnitActions() {
     printf("Escolha a opcao:");
 }
 
-void handleUnitActions(char grid[16][26], int playerchoice, char position[1][1]) {
+/*void handleUnitActions(char grid[16][26], int playerchoice, char position[1][1]) {
     int actionChoice;
 
     while (1)
@@ -492,10 +474,9 @@ void handleUnitActions(char grid[16][26], int playerchoice, char position[1][1])
             break;
         }
     }
-}
+}*/
 
-
-void move(char grid[16][26], int playerchoice, int postition[1][1])
+/*void move(char grid[16][26], int playerchoice, int postition[1][1])
 {
     int x = 0;
     int new_x = 0;
@@ -547,61 +528,7 @@ void move(char grid[16][26], int playerchoice, int postition[1][1])
     else {
         printf("Posicao invalida. Escolha uma posicao dentro dos limites do tabuleiro.\n");
     }
-}
-
-int main() {
-
-    menu();
-
-    int currentPlayer = 1;
-    int castarCoins[2] = { INITIAL_CASTAR_COINS, INITIAL_CASTAR_COINS };
-    Unit units[2];
-    Building buildings[2];
-
-    // Game loop
-    while (1) {
-        system("cls");
-
-        int choice;
-        char position[1][1];
-
-        displayGrid(units, 2, buildings, 2);
-        printf("Vez do jogador %d\n", currentPlayer);
-        printf("Castar Coins: %d\n", castarCoins[currentPlayer - 1]);
-
-        displayActions();
-
-        printf("Op%c%co:", 'ç', 'ã');
-        scanf("%d", &choice);
-
-
-
-        switch (choice) {
-        case 1:
-            system("cls");
-            displayGrid(units, 2, buildings, 2);
-            posicionar(grid);
-            break;
-        case 2:
-            system("cls");
-            displayGrid(units, 2, buildings, 2);
-            position[1][1] = selecionar(grid);
-            handleUnitActions(grid, playerchoice, position);
-            break;
-        case 3:
-            // End turn
-            // Switch players
-            if (playerchoice == 1) { playerchoice = 2; }
-            else if (playerchoice == 2) { playerchoice = 1; }
-            break;
-        default:
-            printf("Op��o Inv�lida. Escolher outra vez.\n");
-        }
-    }
-
-    return 0;
-}
-
+}*/
 
 void displayGrid() {
     // Print letters
@@ -671,4 +598,184 @@ void displayActions() {
     printf("1. Posicionar Constru��o\n");
     printf("2. Selecionar Unidade\n");
     printf("3. Encerrar Turno\n");
+}
+
+int main() {
+	
+    setlocale(LC_ALL, "Portuguese");
+
+    //variables
+    int currentPlayer = 1;
+    int castarCoins[2] = { INITIAL_CASTAR_COINS, INITIAL_CASTAR_COINS };
+    int choice;
+
+    struct GameState game;
+
+    // initializate
+    struct PlayerClass playerClass[] = {
+        {1, "Gondor"},
+        {2, "Mordor"}
+    };
+
+    struct Unit unit[] = {
+        {1, "Infantry", "G", 1},
+        {2, "Cavalry", "SK", 1},
+        {3, "Artillery", "T", 1},
+        {4, "Infantry", "OW", 2},
+        {5, "Cavalry", "W", 2},
+        {6, "Artillery", "ST", 2}
+    };
+
+    struct UnitType unitType[] = {
+        {1, 10, 2, 30, 5},//infantary
+        {2, 15, 1, 40, 7},//cavalary
+        {1, 20, 3, 20, 10}//artilary
+    };
+
+    struct Building building[] = {
+        {1, "Bases", "GGGG", 1},
+        {2, "Bases", "MMMM", 2},
+        {3, "Mines", "SS", 1},
+        {4, "Mines", "EE", 2},
+        {5, "Stables", "LL", 1},
+        {6, "Stables", "MK", 2},
+        {7, "Armoury", "GF", 1},
+        {8, "Armoury", "DF", 2}
+    };
+
+    struct BuildingType buildingType[] = {//  id , cost , health
+        {1, 30, 100},//base 
+        {2, 20, 50},//mine 
+        {3, 25, 70},//barracks
+        {4, 25, 70},//stable
+        {5, 30, 70},//armoury
+    };
+
+    // clean display array
+    if (startverify == 0)
+    {
+        cleantable();
+        startverify++;
+    }
+
+    // define values
+    grid[3][9] = 'F';
+    grid[8][3] = 'A';
+
+
+    //start menu
+Startmenu:
+    printf("Bem-Vindo ao Ring World!\n\n");
+
+    printf("1. Come%car um Novo Jogo\n", 128);
+    printf("2. Carregar Jogo\n");
+    printf("3. Defenições\n");
+    printf("4. Sair\n\n");
+    printf("Introduza a sua escolha (1-4): ");
+    scanf("%d", &choice);
+
+
+    switch (choice)
+    {
+    case 1:
+        system("cls");
+        printf("Escolha o seu lado:\n");
+        printf("1. Gondor\n");
+        printf("2. Mordor\n");
+        printf("Introduza a sua Escolha (1-2): ");
+        scanf("%d", &playerchoice);
+
+        switch (playerchoice) {
+        case 1:
+            system("cls");
+            printf("Voce escolheu Gondor. Vamos começar o jogo!\n");
+            playerRegister(playerchoice, playerClass);
+            Sleep(2000);
+            break;
+        case 2:
+            system("cls");
+            printf("Voce escolheu Mordor. Vamos começar o jogo!\n");
+            playerRegister(playerchoice, playerClass);
+            Sleep(2000);
+            break;
+        default:
+            system("cls");
+            printf("Escolha inválida, por favor selecione o seu lado.\n");
+            Sleep(2000);
+            goto Startmenu;
+        }
+        break;
+
+    case 2:
+        system("cls");
+        printf("\nCarregando o jogo ... ");
+        Sleep(2000);
+        break;
+
+    case 3:
+        system("cls");
+        printf("\nAcessando as defenições ... \n");
+        Sleep(2000);
+        break;
+
+    case 4:
+        system("cls");
+        printf("\nA sair do Ring World. Até à proxima!\n");
+        saveGameToFile(players, "save1" SAVE_FILE_EXTENSION);
+        Sleep(2000);
+        break;
+
+    default:
+        printf("\nEscolha inválida, por favor selecione um n�mero entre 1-4!\n");
+        Sleep(2000);
+        goto Startmenu;
+        break;
+    }
+
+    // Game loop
+    while (1) {
+        system("cls");
+
+        int choice;
+        char position[1][1];
+
+        displayGrid();
+        printf("Vez do jogador %d\n", currentPlayer);
+        printf("Castar Coins: %d\n", players[currentPlayer - 1].coins);
+
+        displayActions();
+
+        printf("Op%c%co:", 'ç', 'ã');
+        scanf("%d", &choice);
+
+        switch (choice) {
+        case 1:
+            system("cls");
+            displayGrid();
+            posicionar(grid);
+            break;
+        case 2:
+            system("cls");
+            displayGrid();
+            position[1][1] = selecionar(grid);
+            //handleUnitActions(grid, playerchoice, position);
+            break;
+        case 3:
+            // End turn
+            // Switch players
+            if (playerchoice == 1) { playerchoice = 2; }
+            else if (playerchoice == 2) { playerchoice = 1; }
+            break;
+        case 4:
+            system("cls");
+            printf("\nA sair do Ring World. Até à proxima!\n");
+            saveGameToFile(players, "save1" SAVE_FILE_EXTENSION);
+            Sleep(2000);
+            break;
+        default:
+            printf("Op��o Inv�lida. Escolher outra vez.\n");
+        }
+    }
+
+    return 0;
 }
