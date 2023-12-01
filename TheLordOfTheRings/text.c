@@ -627,9 +627,9 @@ int main() {
     };
 
     struct UnitType unitType[] = {
-        {1, 10, 2, 30, 5},//infantary
-        {2, 15, 1, 40, 7},//cavalary
-        {1, 20, 3, 20, 10}//artilary
+        {1, INFANTRY_COST, INFANTRY_MOVEMENT_COST, INFANTRY_HEALTH, INFANTRY_ATTACK_POWER},//infantary
+        {2, CAVALRY_COST, CAVALRY_MOVEMENT_COST, CAVALRY_HEALTH, CAVALRY_ATTACK_POWER},//cavalary
+        {1, ARTILLERY_COST, ARTILLERY_MOVEMENT_COST, ARTILLERY_HEALTH, ARTILLERY_ATTACK_POWER}//artilary
     };
 
     struct Building building[] = {
@@ -644,11 +644,11 @@ int main() {
     };
 
     struct BuildingType buildingType[] = {//  id , cost , health
-        {1, 30, 100},//base 
-        {2, 20, 50},//mine 
-        {3, 25, 70},//barracks
-        {4, 25, 70},//stable
-        {5, 30, 70},//armoury
+        {1, BASE_COST, BASE_HEALTH},//base 
+        {2, MINE_COST, MINE_HEALTH},//mine 
+        {3, BARRACKS_COST, BARRACKS_HEALTH},//barracks
+        {4, STABLES_COST, STABLES_HEALTH},//stable
+        {5, ARMOURY_COST, ARMOURY_HEALTH},//armoury
     };
 
     // clean display array
