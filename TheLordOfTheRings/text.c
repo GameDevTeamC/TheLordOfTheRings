@@ -62,14 +62,10 @@ struct PlayerClass {
     char name[100];
 };
 
-//struct info player
-struct Player {
-    int id;
-    int coins;
-    struct PlayerClass playerClass;
+struct PlayerClass playerClass[2] = {
+    {1, "Gondor"},
+    {2, "Mordor"}
 };
-
-struct Player players[2];
 
 //struct info for the building type
 struct BuildingType {
@@ -78,20 +74,34 @@ struct BuildingType {
     int health;
 };
 
+struct BuildingType buildingType[5] = {//  id , cost , health
+    {1, BASE_COST, BASE_HEALTH},//base 
+    {2, MINE_COST, MINE_HEALTH},//mine 
+    {3, BARRACKS_COST, BARRACKS_HEALTH},//barracks
+    {4, STABLES_COST, STABLES_HEALTH},//stable
+    {5, ARMOURY_COST, ARMOURY_HEALTH},//armoury
+};
+
 //struct building
 struct Building {
     int id;
-    char name[100];
-    int x, y;
+    char name[20];
+    char code[4];
+    struct PlayerClass playerclass;
+    struct BuildingType buildingType;
 };
 
-//struct unit type
-struct Unit
-{
-    int id;
-    char name[100];
-    char code[100];
-    struct PlayerClass playerclass;
+struct Building building[10] = {
+    {1, "Bases", "GGGG", 1, 1},
+    {1, "Bases", "MMMM", 2, 1},
+    {2, "Mines", "SS", 1, 2},
+    {2, "Mines", "EE", 2, 2},
+    {3, "Barracks", "RR", 1, 3},
+    {3, "Barracks", "II", 2, 3},
+    {4, "Stables", "LL", 1, 4},
+    {4, "Stables", "MK", 2, 4},
+    {5, "Armoury", "GF", 1, 5},
+    {5, "Armoury", "DF", 2, 5}
 };
 
 //struct info for the unit type
@@ -103,6 +113,44 @@ struct UnitType {
     int attackPower;
 };
 
+struct UnitType unitType[3] = {
+    {1, INFANTRY_COST, INFANTRY_MOVEMENT_COST, INFANTRY_HEALTH, INFANTRY_ATTACK_POWER},//infantary
+    {2, CAVALRY_COST, CAVALRY_MOVEMENT_COST, CAVALRY_HEALTH, CAVALRY_ATTACK_POWER},//cavalary
+    {3, ARTILLERY_COST, ARTILLERY_MOVEMENT_COST, ARTILLERY_HEALTH, ARTILLERY_ATTACK_POWER}//artilary
+};
+
+//struct unit type
+struct Unit
+{
+    int id;
+    char name[100];
+    char code[100];
+    struct PlayerClass playerclass;
+    struct UnitType unitType;
+    int x, y;
+};
+
+struct Unit unit[6] = {
+    {1, "Infantry", "G", 1, 1},
+    {2, "Cavalry", "SK", 1, 2},
+    {3, "Artillery", "T", 1, 3},
+    {4, "Infantry", "OW", 2, 1},
+    {5, "Cavalry", "W", 2, 2},
+    {6, "Artillery", "ST", 2, 3}
+};
+
+//struct info player
+struct Player {
+    int id;
+    int coins;
+    struct PlayerClass playerClass;
+    struct Unit unit;
+    struct Building building;
+};
+
+struct Player players[2];
+
+// ver
 struct GameState {
     char gameName[100];
     struct Player players[2];
@@ -197,70 +245,50 @@ void displayGrid();
 // Function to display available actions
 void displayActions();
 
+// chose between unit or building
+int actionOption() {
+    int option;
+
+    printf("O que deseja posicionar ?\n1: Constru%c%ces\n2: Tropas\n >> ", 135, 228);
+    scanf("%d", &option);
+
+    return option;
+}
+
 //show buildings for position
 char buildingsmenu() {
-    int choosing, escolha;
-    char carater = 0;
+    int option;
 
-buildingmenu:
-    printf("O que deseja posicionar ?\n1: Constru%c%ces\n2: Tropas\n >> ",135,228);
-    scanf("%d", &choosing);
-    if (choosing == 1) {
-        printf("\n1:Base == (%dcc)\n2:Mina == (%dcc)\n3:Quartel == (%dcc)\n4:Est%cbulos == (%dcc)\n5:Arsenal == (%dcc)\n >> ", BASE_COST, MINE_COST, BARRACKS_COST,160, STABLES_COST, ARMOURY_COST);
-        scanf("%d", &escolha);
-        switch (escolha) {
-        case 1:
-            carater = 'B';//base
-            break;
-        case 2:
-            carater = 'M';//mine
-            break;
-        case 3:
-            carater = 'Q';//barracks
-            break;
-        case 4:
-            carater = 'E';//stable
-            break;
-        case 5:
-            carater = 'A';//armoury
-            break;
-        default:
-            printf("Escolha inv%clida.",160);
-            goto buildingmenu;
-            break;
-        }
-    }
-    else if (choosing == 2) {
-        printf("\n1:Infantaria == (%dcc)\n2:Cavalaria == (%dcc)\n3:Artilharia == (%dcc)\n >>", INFANTRY_COST, CAVALRY_COST, ARTILLERY_COST);
-        scanf("%d", &escolha);
-        switch (escolha) {
-        case 1:
-            carater = 'I';//infantary
-            break;
-        case 2:
-            carater = 'C';//cavalry
-            break;
-        case 3:
-            carater = 'a';//artilry
-            break;
-        default:
-            printf("Escolha inv%clida.",160);
-            goto buildingmenu;
-            break;
-        }
-    }
-    else {
-        printf("Escolha inv%clida.", 160);
-        goto buildingmenu;
-    }
-    return carater;
+    printf("\n1:Base == (%dcc)\n2:Mina == (%dcc)\n3:Quartel == (%dcc)\n4:Est%cbulos == (%dcc)\n5:Arsenal == (%dcc)\n >> ", BASE_COST, MINE_COST, BARRACKS_COST,160, STABLES_COST, ARMOURY_COST);
+    scanf("%d", &option);
+    option -= 1;
+
+    return option;
 }
-// Function to position the buildings
-void posicionar(char grid_a[16][26]) {
-    char letrapos, carater;
-    int numpos;
 
-    carater = buildingsmenu();
+
+int unitMenu() {
+    int option;
+
+    printf("\n1:Infantaria == (%dcc)\n2:Cavalaria == (%dcc)\n3:Artilharia == (%dcc)\n >>", INFANTRY_COST, CAVALRY_COST, ARTILLERY_COST);
+    scanf("%d", &option);
+    option -= 1;
+
+    return option;
+}
+
+
+// Function to position the buildings
+void posicionar(char grid_a[16][26], int currentPlayer) {
+    char letrapos, carater;
+    int numpos, option;
+
+    option = actionOption();
+
+    if (option == 1)
+        option = buildingsmenu();
+    else option = unitMenu();
+
 
 selectnumpos:
     printf("\nSelecione a posi%c%co:\nN%cmero >> ",135,198,163);
@@ -283,125 +311,37 @@ selectletrapos:
     numpos -= 1;
     letrapos -= 97;
 
-    //placing int the table 
-    if (playerchoice == 1) {//Gondor/Rivendell
-        switch (carater) {
-        case 'B'://base Gondor (GGGG)
-            if (letrapos <= 21) {
-                grid_a[numpos][letrapos] = 'G';
-                grid_a[numpos][++letrapos] = 'G';
-                grid_a[numpos][++letrapos] = 'G';
-                grid_a[numpos][++letrapos] = 'G';
+    for (int i = 0; i < 2; i++)
+    {
+        if (players[currentPlayer].playerClass.id == playerClass[i].id) {
+            for (int j = 0; j < 2; j++)
+            {
+                if (building[j].playerclass.id == playerClass[i].id) {
+                    int size = strlen(building[j].code);
+                    int verify = (letrapos + size);
+                    int aux = verify - 26;
 
-            }
-            else { goto selectnumpos; }
-            break;
-        case 'M'://mine Shire (SS)
-            if (letrapos <= 23) {
-                grid_a[numpos][letrapos] = 'S';
-                grid_a[numpos][++letrapos] = 'S';
-            }
-            else { goto selectnumpos; }
-            break;
-        case 'Q'://barracks Rohan (RR)
-            if (letrapos <= 23) {
-                grid_a[numpos][letrapos] = 'R';
-                grid_a[numpos][++letrapos] = 'R';
-            }
-            else { goto selectnumpos; }
-            break;
-        case 'E'://stables Lothlórien (LL)
-            if (letrapos <= 23) {
-                grid_a[numpos][letrapos] = 'L';
-                grid_a[numpos][++letrapos] = 'L';
-            }
-            else { goto selectnumpos; }
-            break;
-        case'A'://armoury Gondorian Forge (GF)
-            if (letrapos <= 23) {
-                grid_a[numpos][letrapos] = 'G';
-                grid_a[numpos][++letrapos] = 'F';
-            }
-            else { goto selectnumpos; }
-            break;
-        case 'I'://infantry Gondorian Guards (G)
-            grid_a[numpos][letrapos] = 'G';
-            break;
-        case 'C'://cavalry Swan-Knights (SK)
-            if (letrapos <= 23) {
-                grid_a[numpos][letrapos] = 'S';
-                grid_a[numpos][++letrapos] = 'K';
-            }
-            else { goto selectnumpos; }
-            break;
-        case 'a'://artillery Trebuchets (T)
-            grid_a[numpos][letrapos] = 'T';
-            break;
-        }
-    }
+                    players[currentPlayer].coins -= building[j].buildingType.buyCost;
 
+                    buildingType[2].id;
 
-    else if (playerchoice == 2) {//Mordor
-        switch (carater) {
-        case 'B'://base Mordor (MMMM)
-            if (letrapos <= 21) {
-                grid_a[numpos][letrapos] = 'M';
-                grid_a[numpos][++letrapos] = 'M';
-                grid_a[numpos][++letrapos] = 'M';
-                grid_a[numpos][++letrapos] = 'M';
+                    if (verify > 26)
+                    {
+                        letrapos -= aux;
+                        for (int h = 0; h < size; h++) {
+                            grid_a[numpos][letrapos++] = building[j].code[h];
+                        }
+                    }
+                    else {
+                        for (int h = 0; h < size; h++) {
+                            grid_a[numpos][letrapos++] = building[j].code[h];
+                        }
+                    }
+                }
             }
-            else { goto selectnumpos; }
-            break;
-        case 'M'://mine Erebor (EE)
-            if (letrapos <= 23) {
-                grid_a[numpos][letrapos] = 'E';
-                grid_a[numpos][++letrapos] = 'E';
-            }
-            else { goto selectnumpos; }
-            break;
-        case 'Q'://barracks Isengard (II)
-            if (letrapos <= 23) {
-                grid_a[numpos][letrapos] = 'I';
-                grid_a[numpos][++letrapos] = 'I';
-            }
-            else { goto selectnumpos; }
-            break;
-        case 'E'://stables Mirkwood (MK)
-            if (letrapos <= 23) {
-                grid_a[numpos][letrapos] = 'M';
-                grid_a[numpos][++letrapos] = 'K';
-            }
-            else { goto selectnumpos; }
-            break;
-        case'A'://armoury Dark Foegw (DF)
-            if (letrapos <= 23) {
-                grid_a[numpos][letrapos] = 'D';
-                grid_a[numpos][++letrapos] = 'F';
-            }
-            else { goto selectnumpos; }
-            break;
-        case 'I'://infantary Orc Warrior (OW)
-            if (letrapos <= 23) {
-                grid_a[numpos][letrapos] = 'O';
-                grid_a[numpos][++letrapos] = 'W';
-            }
-            else { goto selectnumpos; }
-            break;
-        case 'C'://cavalry Wargs (W)
-            grid_a[numpos][letrapos] = 'W';
-            break;
-        case 'a'://artillery Siege Towers (ST)
-            if (letrapos <= 23) {
-                grid_a[numpos][letrapos] = 'S';
-                grid_a[numpos][++letrapos] = 'T';
-            }
-            else { goto selectnumpos; }
-            break;
         }
     }
 }
-
-
 
 //function to select a unit from the grid
 int* selecionar(char grid[16][26])
@@ -602,54 +542,10 @@ void displayActions() {
 
 int main() {
 	
-  
-
     //variables
-    int currentPlayer = 1;
+    int currentPlayer = 0;
     int castarCoins[2] = { INITIAL_CASTAR_COINS, INITIAL_CASTAR_COINS };
     int choice;
-
-    struct GameState game;
-
-    // initializate
-    struct PlayerClass playerClass[] = {
-        {1, "Gondor"},
-        {2, "Mordor"}
-    };
-
-    struct Unit unit[] = {
-        {1, "Infantry", "G", 1},
-        {2, "Cavalry", "SK", 1},
-        {3, "Artillery", "T", 1},
-        {4, "Infantry", "OW", 2},
-        {5, "Cavalry", "W", 2},
-        {6, "Artillery", "ST", 2}
-    };
-
-    struct UnitType unitType[] = {
-        {1, INFANTRY_COST, INFANTRY_MOVEMENT_COST, INFANTRY_HEALTH, INFANTRY_ATTACK_POWER},//infantary
-        {2, CAVALRY_COST, CAVALRY_MOVEMENT_COST, CAVALRY_HEALTH, CAVALRY_ATTACK_POWER},//cavalary
-        {1, ARTILLERY_COST, ARTILLERY_MOVEMENT_COST, ARTILLERY_HEALTH, ARTILLERY_ATTACK_POWER}//artilary
-    };
-
-    struct Building building[] = {
-        {1, "Bases", "GGGG", 1},
-        {2, "Bases", "MMMM", 2},
-        {3, "Mines", "SS", 1},
-        {4, "Mines", "EE", 2},
-        {5, "Stables", "LL", 1},
-        {6, "Stables", "MK", 2},
-        {7, "Armoury", "GF", 1},
-        {8, "Armoury", "DF", 2}
-    };
-
-    struct BuildingType buildingType[] = {//  id , cost , health
-        {1, BASE_COST, BASE_HEALTH},//base 
-        {2, MINE_COST, MINE_HEALTH},//mine 
-        {3, BARRACKS_COST, BARRACKS_HEALTH},//barracks
-        {4, STABLES_COST, STABLES_HEALTH},//stable
-        {5, ARMOURY_COST, ARMOURY_HEALTH},//armoury
-    };
 
     // clean display array
     if (startverify == 0)
@@ -741,7 +637,7 @@ Startmenu:
 
         displayGrid();
         printf("Vez do jogador %d\n", currentPlayer);
-        printf("Castar Coins: %d\n", players[currentPlayer - 1].coins);
+        printf("Castar Coins: %d\n", players[currentPlayer].coins);
 
         displayActions();
 
@@ -752,7 +648,7 @@ Startmenu:
         case 1:
             system("cls");
             displayGrid();
-            posicionar(grid);
+            posicionar(grid, currentPlayer, playerClass);
             break;
         case 2:
             system("cls");
