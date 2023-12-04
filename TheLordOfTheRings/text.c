@@ -349,6 +349,37 @@ void displayUnitActions() {
     printf("Escolha a opcao:");
 }
 
+int* selecionar(char grid[16][26])
+{
+    int x;
+    char y;
+    char position[1][1];
+
+    getchar();
+    printf("Selecione a posi%c%co da unidade (linha e coluna): ", 135, 198);
+    scanf("%d %c", &x, &y);
+
+    //checks if the selected position is within the grid bounds
+    if (x >= 1 && x <= GRID_HEIGHT && y >= 1 && y <= GRID_WIDTH)
+    {
+        //checks if there is a unit at the selected position
+        if (grid[x - 1][y - 1] != ' ') {
+            position[0][0] = x;
+            position[1][0] = y;
+            return position;//valid selection
+        }
+        else
+        {
+            printf("N%co h%c nenhuma unidade nessa posicao. Escolha novamente!\n", 198, 160);
+        }
+    }
+    else
+    {
+        printf("Posi%c%co inv%clida. Escolha novamente!\n", 135, 198, 160);
+    }
+    return 0;
+}
+
 /*void handleUnitActions(char grid[16][26], int playerchoice, char position[1][1]) {
     int actionChoice;
 
