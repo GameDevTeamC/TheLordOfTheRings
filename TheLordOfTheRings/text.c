@@ -339,39 +339,6 @@ selectletrapos:
         }
     }
 }
-
-//function to select a unit from the grid
-int* selecionar(char grid[16][26])
-{
-    int x;
-    char y;
-    char position[1][1];
-
-    getchar();
-    printf("Selecione a posi%c%co da unidade (linha e coluna): ", 135,198);
-    scanf("%d %c", &x, &y);
-
-    //checks if the selected position is within the grid bounds
-    if (x >= 1 && x <= GRID_HEIGHT && y >= 1 && y <= GRID_WIDTH)
-    {
-        //checks if there is a unit at the selected position
-        if (grid[x - 1][y - 1] != ' ') {
-            position[0][0] = x;
-            position[1][0] = y;
-            return position;//valid selection
-        }
-        else
-        {
-            printf("N%co h%c nenhuma unidade nessa posicao. Escolha novamente!\n", 198, 160);
-        }
-    }
-    else
-    {
-        printf("Posi%c%co inv%clida. Escolha novamente!\n", 135, 198, 160);
-    }
-    return 0;
-}
-
 //function to display the unit actions after being select
 void displayUnitActions() {
 
