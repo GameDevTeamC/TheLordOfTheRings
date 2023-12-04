@@ -266,7 +266,6 @@ char buildingsmenu() {
     return option;
 }
 
-
 int unitMenu() {
     int option;
 
@@ -276,7 +275,6 @@ int unitMenu() {
 
     return option;
 }
-
 
 // Function to position the buildings
 void posicionar(char grid_a[16][26], int currentPlayer) {
@@ -288,7 +286,6 @@ void posicionar(char grid_a[16][26], int currentPlayer) {
     if (option == 1)
         option = buildingsmenu();
     else option = unitMenu();
-
 
 selectnumpos:
     printf("\nSelecione a posi%c%co:\nN%cmero >> ",135,198,163);
@@ -532,7 +529,6 @@ void displayGrid() {
     printf("\n");
 }
 
-
 void displayActions() {
     // Display available actions for the player
     printf("1. Posicionar Constru%c%co\n",135,198);
@@ -554,11 +550,6 @@ int main() {
         startverify++;
     }
 
-    // define values
-    grid[3][9] = 'F';
-    grid[8][3] = 'A';
-
-
     //start menu
 Startmenu:
     printf("Bem-Vindo ao Ring World!\n\n");
@@ -569,7 +560,6 @@ Startmenu:
     printf("4. Sair\n\n");
     printf("Introduza a sua escolha (1-4): ");
     scanf("%d", &choice);
-
 
     switch (choice)
     {
@@ -636,7 +626,7 @@ Startmenu:
         char position[1][1];
 
         displayGrid();
-        printf("Vez do jogador %d\n", currentPlayer);
+        printf("Vez do jogador %d\n", playerchoice);
         printf("Castar Coins: %d\n", players[currentPlayer].coins);
 
         displayActions();
