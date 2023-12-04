@@ -259,8 +259,17 @@ int actionOption() {
 char buildingsmenu() {
     int option;
 
+buildingSelect:
+    system("cls");
+    displayGrid();
     printf("\n1:Base == (%dcc)\n2:Mina == (%dcc)\n3:Quartel == (%dcc)\n4:Est%cbulos == (%dcc)\n5:Arsenal == (%dcc)\n >> ", BASE_COST, MINE_COST, BARRACKS_COST,160, STABLES_COST, ARMOURY_COST);
     scanf("%d", &option);
+    if (option > 5 || option < 1)
+    {
+        printf("Escolha invalida. Selecione uma opcao valida.");
+        Sleep(2000);
+        goto buildingSelect;
+    }
     option -= 1;
 
     return option;
@@ -269,8 +278,17 @@ char buildingsmenu() {
 int unitMenu() {
     int option;
 
+unitSelect:
+    system("cls");
+    displayGrid();
     printf("\n1:Infantaria == (%dcc)\n2:Cavalaria == (%dcc)\n3:Artilharia == (%dcc)\n >>", INFANTRY_COST, CAVALRY_COST, ARTILLERY_COST);
     scanf("%d", &option);
+    if (option > 3 || option < 1)
+    {
+        printf("Escolha invalida. Selecione uma opcao valida.");
+        Sleep(2000);
+        goto unitSelect;
+    }
     option -= 1;
 
     return option;
