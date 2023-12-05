@@ -373,8 +373,10 @@ int* selecionar(char grid[16][26])
     char y;
     char position[1][1];
 
+selectUnit:
+
     getchar();
-    printf("Selecione a posi%c%co da unidade (linha e coluna): ", 135, 198);
+    printf("Selecione a posi%c%co da unidade (numero e letra): ", 135, 198);
     scanf("%d %c", &x, &y);
 
     //checks if the selected position is within the grid bounds
@@ -394,40 +396,14 @@ int* selecionar(char grid[16][26])
     else
     {
         printf("Posi%c%co inv%clida. Escolha novamente!\n", 135, 198, 160);
+        Sleep(2000);
+        system("cls");
+        displayGrid();
+        goto selectUnit;
     }
     return 0;
 }
 
-/*void handleUnitActions(char grid[16][26], int playerchoice, char position[1][1]) {
-    int actionChoice;
-
-    while (1)
-    {
-        displayUnitActions();
-
-        printf("Escolha uma açao (1-3): ");
-        scanf("%d", &actionChoice);
-
-        switch (actionChoice)
-        {
-            //movement
-        case 1:
-            move(grid, playerchoice, position);
-            break;
-            //atack
-        case 2:
-            break;
-            //voltar
-        case 3:
-            break;
-
-
-        default:
-            printf("Opcao invalida. Selecione outra opcao.");
-            break;
-        }
-    }
-}*/
 
 /*void move(char grid[16][26], int playerchoice, int postition[1][1])
 {
@@ -660,7 +636,28 @@ Startmenu:
             system("cls");
             displayGrid();
             position[1][1] = selecionar(grid);
-            //handleUnitActions(grid, playerchoice, position);
+            displayUnitActions();
+            scanf("%d", &choice);
+            if (choice == 1)
+            {
+                switch (choice)
+                {
+                case 1:
+                    system("cls");
+                    displayGrid();
+                    //mover();
+                case 2:
+                    system("cls");
+                    displayGrid();
+                    //atacar();
+                default:
+                    break;
+                }
+            }
+            else
+            {
+                
+            }
             break;
         case 3:
             // End turn
