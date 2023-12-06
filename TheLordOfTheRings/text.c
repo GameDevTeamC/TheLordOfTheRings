@@ -1,12 +1,12 @@
-#define _CRT_SECURE_NO_WARNINGS 
+#define _CRT_SECURE_NO_WARNINGS
 #define GRID_WIDTH 26
 #define GRID_HEIGHT 16
-//constants for economy and costs
+// constants for economy and costs
 #define INITIAL_CASTAR_COINS 100
 #define INFANTRY_MOVEMENT_COST 2
 #define CAVALRY_MOVEMENT_COST 1
 #define ARTILLERY_MOVEMENT_COST 3
-#define MINE_INCOME 5 //per turn
+#define MINE_INCOME 5 // per turn
 #define BASE_COST 30
 #define MINE_COST 20
 #define BARRACKS_COST 25
@@ -15,7 +15,7 @@
 #define INFANTRY_COST 10
 #define CAVALRY_COST 15
 #define ARTILLERY_COST 20
-//constants for combat and health
+// constants for combat and health
 #define INFANTRY_ATTACK_POWER 5
 #define CAVALRY_ATTACK_POWER 7
 #define ARTILLERY_ATTACK_POWER 10
@@ -27,9 +27,9 @@
 #define INFANTRY_HEALTH 30
 #define CAVALRY_HEALTH 40
 #define ARTILLERY_HEALTH 20
-//file
+// file
 #define SAVE_FILE_EXTENSION ".txt"
-//Librarys
+// Librarys
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
@@ -38,52 +38,58 @@
 #include <time.h>
 #include <windows.h>
 
-//array for table positions
+// array for table positions
 char grid[16][26];
 
-//for not clean the table every time menu open
+// for not clean the table every time menu open
 int startverify = 0;
 
-//player team definer
+// player team definer
 int playerchoice;
 
-//clean array table
-void cleantable() {
-    for (int u = 0; u < 16; u++) {
-        for (int i = 0; i < 26; i++) {
+// clean array table
+void cleantable()
+{
+    for (int u = 0; u < 16; u++)
+    {
+        for (int i = 0; i < 26; i++)
+        {
             grid[u][i] = ' ';
         }
     }
 }
 
-//struct info for the player side
-struct PlayerClass {
+// struct info for the player side
+struct PlayerClass
+{
     int id;
     char name[100];
 };
 
 struct PlayerClass playerClass[2] = {
     {1, "Gondor"},
-    {2, "Mordor"}
-};
+    {2, "Mordor"}};
 
-//struct info for the building type
-struct BuildingType {
+// struct info for the building type
+struct BuildingType
+{
     int id;
     int buyCost;
     int health;
 };
 
-struct BuildingType buildingType[5] = {//  id , cost , health
-    {1, BASE_COST, BASE_HEALTH},//base 
-    {2, MINE_COST, MINE_HEALTH},//mine 
-    {3, BARRACKS_COST, BARRACKS_HEALTH},//barracks
-    {4, STABLES_COST, STABLES_HEALTH},//stable
-    {5, ARMOURY_COST, ARMOURY_HEALTH},//armoury
+struct BuildingType buildingType[5] = {
+    //  id , cost , health
+    {1, BASE_COST, BASE_HEALTH},         // base
+    {2, MINE_COST, MINE_HEALTH},         // mine
+    {3, BARRACKS_COST, BARRACKS_HEALTH}, // barracks
+    {4, STABLES_COST, STABLES_HEALTH},   // stable
+    {5, ARMOURY_COST, ARMOURY_HEALTH},   // armoury
 };
 
-//struct building
-struct Building {
+// struct building
+struct Building
+{
     int id;
     char name[20];
     char code[4];
@@ -101,11 +107,11 @@ struct Building building[10] = {
     {4, "Stables", "LL", 1, 4},
     {4, "Stables", "MK", 2, 4},
     {5, "Armoury", "GF", 1, 5},
-    {5, "Armoury", "DF", 2, 5}
-};
+    {5, "Armoury", "DF", 2, 5}};
 
-//struct info for the unit type
-struct UnitType {
+// struct info for the unit type
+struct UnitType
+{
     int id;
     int buyCost;
     int moveCost;
@@ -114,12 +120,12 @@ struct UnitType {
 };
 
 struct UnitType unitType[3] = {
-    {1, INFANTRY_COST, INFANTRY_MOVEMENT_COST, INFANTRY_HEALTH, INFANTRY_ATTACK_POWER},//infantary
-    {2, CAVALRY_COST, CAVALRY_MOVEMENT_COST, CAVALRY_HEALTH, CAVALRY_ATTACK_POWER},//cavalary
-    {3, ARTILLERY_COST, ARTILLERY_MOVEMENT_COST, ARTILLERY_HEALTH, ARTILLERY_ATTACK_POWER}//artilary
+    {1, INFANTRY_COST, INFANTRY_MOVEMENT_COST, INFANTRY_HEALTH, INFANTRY_ATTACK_POWER},    // infantary
+    {2, CAVALRY_COST, CAVALRY_MOVEMENT_COST, CAVALRY_HEALTH, CAVALRY_ATTACK_POWER},        // cavalary
+    {3, ARTILLERY_COST, ARTILLERY_MOVEMENT_COST, ARTILLERY_HEALTH, ARTILLERY_ATTACK_POWER} // artilary
 };
 
-//struct unit type
+// struct unit type
 struct Unit
 {
     int id;
@@ -136,11 +142,11 @@ struct Unit unit[6] = {
     {3, "Artillery", "T", 1, 3},
     {4, "Infantry", "OW", 2, 1},
     {5, "Cavalry", "W", 2, 2},
-    {6, "Artillery", "ST", 2, 3}
-};
+    {6, "Artillery", "ST", 2, 3}};
 
-//struct info player
-struct Player {
+// struct info player
+struct Player
+{
     int id;
     int coins;
     struct PlayerClass playerClass;
@@ -151,7 +157,8 @@ struct Player {
 struct Player players[2];
 
 // ver
-struct GameState {
+struct GameState
+{
     char gameName[100];
     struct Player players[2];
 };
@@ -160,18 +167,21 @@ struct GameState {
 void cleantable();
 void displayGrid();
 void displayActions();
-void posicionar(char grid[16][26]);
-int* selecionar(char grid[16][26]);
-void saveGameToFile(struct Player players[2], const char* saveFileName);
-void loadGameFromFile(struct Player players[2], const char* loadFileName);
+void posicionar(char grid[16][26], int currentplayer, int playerclass);
+int *selecionar(char grid[16][26]);
+void saveGameToFile(struct Player players[2], const char *saveFileName);
+void loadGameFromFile(struct Player players[2], const char *loadFileName);
 void playerRegister(int option, struct PlayerClass playerClass[]);
 
-void saveGameToFile(struct Player players[2], const char* saveFileName) {
-    FILE* file = fopen(saveFileName, "wb");
+void saveGameToFile(struct Player players[2], const char *saveFileName)
+{
+    FILE *file = fopen(saveFileName, "wb");
 
-    if (file != NULL) {
+    if (file != NULL)
+    {
         // Save player data
-        for (int i = 0; i < 2; ++i) {
+        for (int i = 0; i < 2; ++i)
+        {
             fprintf(file, "Player %d:\n", i + 1);
             fprintf(file, "  ID: %d\n", players[i].id);
             fprintf(file, "  Coins: %d\n", players[i].coins);
@@ -183,18 +193,22 @@ void saveGameToFile(struct Player players[2], const char* saveFileName) {
         fclose(file);
         printf("Game saved to %s\n", saveFileName);
     }
-    else {
+    else
+    {
         printf("Error opening file for writing.\n");
     }
 }
 
 // Function to load the game from a file
-void loadGameFromFile(struct Player players[2], const char* loadFileName) {
-    FILE* file = fopen(loadFileName, "rb");
+void loadGameFromFile(struct Player players[2], const char *loadFileName)
+{
+    FILE *file = fopen(loadFileName, "rb");
 
-    if (file != NULL) {
+    if (file != NULL)
+    {
         // Load player data
-        for (int i = 0; i < 2; ++i) {
+        for (int i = 0; i < 2; ++i)
+        {
             // Assuming the file structure is consistent with the save format
             fscanf(file, "Player %*d:\n");
             fscanf(file, "  ID: %d\n", &players[i].id);
@@ -207,12 +221,14 @@ void loadGameFromFile(struct Player players[2], const char* loadFileName) {
         fclose(file);
         printf("Game loaded from %s\n", loadFileName);
     }
-    else {
+    else
+    {
         printf("Error opening file for reading.\n");
     }
 }
 
-void playerRegister(int option, struct PlayerClass playerClass[]) {
+void playerRegister(int option, struct PlayerClass playerClass[])
+{
 
     if (option == 1)
     {
@@ -223,20 +239,15 @@ void playerRegister(int option, struct PlayerClass playerClass[]) {
         players[1].coins = INITIAL_CASTAR_COINS;
         players[1].playerClass = playerClass[option];
     }
-    else {
+    else
+    {
         players[0].id = 1;
         players[0].coins = INITIAL_CASTAR_COINS;
         players[0].playerClass = playerClass[option - 1];
         players[1].id = 2;
         players[1].coins = INITIAL_CASTAR_COINS;
-        players[1].playerClass = playerClass[option-2];
+        players[1].playerClass = playerClass[option - 2];
     }
-}
-
-//Start Menu
-void menu() {
-    
-    return 0;
 }
 
 // Function to display the game grid
@@ -246,7 +257,8 @@ void displayGrid();
 void displayActions();
 
 // chose between unit or building
-int actionOption() {
+int actionOption()
+{
     int option;
 
     printf("O que deseja posicionar ?\n1: Constru%c%ces\n2: Tropas\n >> ", 135, 228);
@@ -255,14 +267,15 @@ int actionOption() {
     return option;
 }
 
-//show buildings for position
-char buildingsmenu() {
+// show buildings for position
+char buildingsmenu()
+{
     int option;
 
 buildingSelect:
     system("cls");
     displayGrid();
-    printf("\n1:Base == (%dcc)\n2:Mina == (%dcc)\n3:Quartel == (%dcc)\n4:Est%cbulos == (%dcc)\n5:Arsenal == (%dcc)\n >> ", BASE_COST, MINE_COST, BARRACKS_COST,160, STABLES_COST, ARMOURY_COST);
+    printf("\n1:Base == (%dcc)\n2:Mina == (%dcc)\n3:Quartel == (%dcc)\n4:Est%cbulos == (%dcc)\n5:Arsenal == (%dcc)\n >> ", BASE_COST, MINE_COST, BARRACKS_COST, 160, STABLES_COST, ARMOURY_COST);
     scanf("%d", &option);
     if (option > 5 || option < 1)
     {
@@ -275,7 +288,8 @@ buildingSelect:
     return option;
 }
 
-int unitMenu() {
+int unitMenu()
+{
     int option;
 
 unitSelect:
@@ -295,7 +309,8 @@ unitSelect:
 }
 
 // Function to position the buildings
-void posicionar(char grid_a[16][26], int currentPlayer) {
+void posicionar(char grid_a[16][26], int currentPlayer, int playerclass)
+{
     char letrapos, carater;
     int numpos, option;
 
@@ -303,10 +318,11 @@ void posicionar(char grid_a[16][26], int currentPlayer) {
 
     if (option == 1)
         option = buildingsmenu();
-    else option = unitMenu();
+    else
+        option = unitMenu();
 
 selectnumpos:
-    printf("\nSelecione a posi%c%co:\nN%cmero >> ",135,198,163);
+    printf("\nSelecione a posi%c%co\nN%cmero: ", 135, 198, 163);
     scanf("%d", &numpos);
 
     if (numpos > 16 || numpos < 0)
@@ -316,7 +332,7 @@ selectnumpos:
 
 selectletrapos:
     getchar();
-    printf("\nLetra >> ");
+    printf("\nLetra: ");
     scanf("%c", &letrapos);
     if (letrapos > 122 || letrapos < 97)
     {
@@ -328,10 +344,12 @@ selectletrapos:
 
     for (int i = 0; i < 2; i++)
     {
-        if (players[currentPlayer].playerClass.id == playerClass[i].id) {
+        if (players[currentPlayer].playerClass.id == playerClass[i].id)
+        {
             for (int j = 0; j < 2; j++)
             {
-                if (building[j].playerclass.id == playerClass[i].id) {
+                if (building[j].playerclass.id == playerClass[i].id)
+                {
                     int size = strlen(building[j].code);
                     int verify = (letrapos + size);
                     int aux = verify - 26;
@@ -343,12 +361,15 @@ selectletrapos:
                     if (verify > 26)
                     {
                         letrapos -= aux;
-                        for (int h = 0; h < size; h++) {
+                        for (int h = 0; h < size; h++)
+                        {
                             grid_a[numpos][letrapos++] = building[j].code[h];
                         }
                     }
-                    else {
-                        for (int h = 0; h < size; h++) {
+                    else
+                    {
+                        for (int h = 0; h < size; h++)
+                        {
                             grid_a[numpos][letrapos++] = building[j].code[h];
                         }
                     }
@@ -357,17 +378,18 @@ selectletrapos:
         }
     }
 }
-//function to display the unit actions after being select
-void displayUnitActions() {
+// function to display the unit actions after being select
+void displayUnitActions()
+{
 
-    printf("\nA%c%ces disponiveis para a unidade:\n",135,198);
+    printf("\nA%c%ces disponiveis para a unidade:\n", 135, 198);
     printf("1. Mover\n");
     printf("2. Atacar\n");
     printf("3. Voltar\n");
     printf("Escolha a opcao:");
 }
 
-int* selecionar(char grid[16][26])
+int *selecionar(char grid[16][26])
 {
     int x;
     char y;
@@ -379,14 +401,15 @@ selectUnit:
     printf("Selecione a posi%c%co da unidade (numero e letra): ", 135, 198);
     scanf("%d %c", &x, &y);
 
-    //checks if the selected position is within the grid bounds
+    // checks if the selected position is within the grid bounds
     if (x >= 1 && x <= GRID_HEIGHT && y >= 1 && y <= GRID_WIDTH)
     {
-        //checks if there is a unit at the selected position
-        if (grid[x - 1][y - 1] != ' ') {
+        // checks if there is a unit at the selected position
+        if (grid[x - 1][y - 1] != ' ')
+        {
             position[0][0] = x;
             position[1][0] = y;
-            return position;//valid selection
+            return position; // valid selection
         }
         else
         {
@@ -403,7 +426,6 @@ selectUnit:
     }
     return 0;
 }
-
 
 /*void move(char grid[16][26], int playerchoice, int postition[1][1])
 {
@@ -459,10 +481,12 @@ selectUnit:
     }
 }*/
 
-void displayGrid() {
+void displayGrid()
+{
     // Print letters
     printf("   ");
-    for (int i = 0; i < GRID_WIDTH; i++) {
+    for (int i = 0; i < GRID_WIDTH; i++)
+    {
         printf(" %c", 'A' + i);
     }
     printf("\n");
@@ -470,28 +494,32 @@ void displayGrid() {
     // Print top border
     printf("   ");
     printf("%c%c%c", 218, 196, 194);
-    for (int i = 0; i < (GRID_WIDTH / 2) * 2 - 2; i++) {
+    for (int i = 0; i < (GRID_WIDTH / 2) * 2 - 2; i++)
+    {
         printf("%c%c", 196, 194);
-
     }
     printf("%c%c", 196, 191);
     printf("\n");
 
     // Print grid
-    for (int i = 0; i < GRID_HEIGHT; i++) {
+    for (int i = 0; i < GRID_HEIGHT; i++)
+    {
         // Prin left border and numbers
         printf("%2d %c", i + 1, 179);
 
-        for (int j = 0; j < GRID_WIDTH; j++) {
+        for (int j = 0; j < GRID_WIDTH; j++)
+        {
             int unitOrBuilding = 0;
 
             // If no unit or building print empty cell
-            if (!unitOrBuilding) {
+            if (!unitOrBuilding)
+            {
                 printf("%c", grid[i][j]);
             }
 
             // Print vertical bordar
-            if (j < GRID_WIDTH - 1) {
+            if (j < GRID_WIDTH - 1)
+            {
                 printf("%c", 179);
             }
         }
@@ -500,10 +528,12 @@ void displayGrid() {
         printf("%c\n", 179, i + 1);
 
         // Print horizontal border
-        if (i < GRID_HEIGHT - 1) {
+        if (i < GRID_HEIGHT - 1)
+        {
             printf("   ");
             printf("%c%c%c", 195, 196, 197);
-            for (int j = 0; j < (GRID_WIDTH / 2) * 2 - 2; j++) {
+            for (int j = 0; j < (GRID_WIDTH / 2) * 2 - 2; j++)
+            {
                 printf("%c%c", 196, 197);
             }
             printf("%c%c", 196, 180);
@@ -514,25 +544,28 @@ void displayGrid() {
     // Print bottom border
     printf("   ");
     printf("%c%c%c", 192, 196, 193);
-    for (int i = 0; i < (GRID_WIDTH / 2) * 2 - 2; i++) {
+    for (int i = 0; i < (GRID_WIDTH / 2) * 2 - 2; i++)
+    {
         printf("%c%c", 196, 193);
     }
     printf("%c%c", 196, 217);
     printf("\n");
 }
 
-void displayActions() {
+void displayActions()
+{
     // Display available actions for the player
-    printf("1. Posicionar Constru%c%co\n",135,198);
+    printf("1. Posicionar Constru%c%co\n", 135, 198);
     printf("2. Selecionar Unidade\n");
     printf("3. Encerrar Turno\n");
 }
 
-int main() {
-	
-    //variables
+int main()
+{
+
+    // variables
     int currentPlayer = 0;
-    int castarCoins[2] = { INITIAL_CASTAR_COINS, INITIAL_CASTAR_COINS };
+    int castarCoins[2] = {INITIAL_CASTAR_COINS, INITIAL_CASTAR_COINS};
     int choice;
 
     // clean display array
@@ -542,13 +575,13 @@ int main() {
         startverify++;
     }
 
-    //start menu
+// start menu
 Startmenu:
+    system("cls");
     printf("Bem-Vindo ao Ring World!\n\n");
-
     printf("1. Come%car um Novo Jogo\n", 135);
     printf("2. Carregar Jogo\n");
-    printf("3. Defeni%c%ces\n",135,228);
+    printf("3. Defeni%c%ces\n", 135, 228);
     printf("4. Sair\n\n");
     printf("Introduza a sua escolha (1-4): ");
     scanf("%d", &choice);
@@ -563,22 +596,23 @@ Startmenu:
         printf("Introduza a sua Escolha (1-2): ");
         scanf("%d", &playerchoice);
 
-        switch (playerchoice) {
+        switch (playerchoice)
+        {
         case 1:
             system("cls");
-            printf("Voce escolheu Gondor. Vamos come%car o jogo!\n",135);
+            printf("Voce escolheu Gondor. Vamos come%car o jogo!\n", 135);
             playerRegister(playerchoice, playerClass);
             Sleep(2000);
             break;
         case 2:
             system("cls");
-            printf("Voce escolheu Mordor. Vamos come%car o jogo!\n",135);
+            printf("Voce escolheu Mordor. Vamos come%car o jogo!\n", 135);
             playerRegister(playerchoice, playerClass);
             Sleep(2000);
             break;
         default:
             system("cls");
-            printf("Escolha inv%clida, por favor selecione o seu lado.\n",160);
+            printf("Escolha inv%clida, por favor selecione o seu lado.\n", 160);
             Sleep(2000);
             goto Startmenu;
         }
@@ -592,33 +626,35 @@ Startmenu:
 
     case 3:
         system("cls");
-        printf("\nAcessando as defeni%c%ces ... \n",135,228);
+        printf("\nAcessando as defeni%c%ces ... \n", 135, 228);
         Sleep(2000);
+        goto Startmenu; // menu options in progress...(return to menu)
         break;
 
     case 4:
         system("cls");
-        printf("\nA sair do Ring World. At%c %c pr%cxima!\n",130,133,162);
+        printf("\nA sair do Ring World. At%c %c pr%cxima!\n", 130, 133, 162);
         saveGameToFile(players, "save1" SAVE_FILE_EXTENSION);
         Sleep(2000);
         break;
 
     default:
-        printf("\nEscolha inv%clida, por favor selecione um n%cmero entre 1-4!\n",160,163);
+        printf("\nEscolha inv%clida, por favor selecione um n%cmero entre 1-4!\n", 160, 163);
         Sleep(2000);
         goto Startmenu;
         break;
     }
 
     // Game loop
-    while (1) {
+    while (1)
+    {
         system("cls");
 
         int choice;
         char position[1][1];
 
         displayGrid();
-        printf("Vez do jogador %d\n", playerchoice);
+        printf("Vez do jogador %d (%s)\n", playerchoice,players[playerchoice-1].playerClass.name);
         printf("Castar Coins: %d\n", players[currentPlayer].coins);
 
         displayActions();
@@ -626,7 +662,8 @@ Startmenu:
         printf("Op%c%co:", 135, 198);
         scanf("%d", &choice);
 
-        switch (choice) {
+        switch (choice)
+        {
         case 1:
             system("cls");
             displayGrid();
@@ -645,34 +682,39 @@ Startmenu:
                 case 1:
                     system("cls");
                     displayGrid();
-                    //mover();
+                    // mover();
                 case 2:
                     system("cls");
                     displayGrid();
-                    //atacar();
+                    // atacar();
                 default:
                     break;
                 }
             }
             else
             {
-                
             }
             break;
         case 3:
             // End turn
             // Switch players
-            if (playerchoice == 1) { playerchoice = 2; }
-            else if (playerchoice == 2) { playerchoice = 1; }
+            if (playerchoice == 1)
+            {
+                playerchoice = 2;
+            }
+            else if (playerchoice == 2)
+            {
+                playerchoice = 1;
+            }
             break;
         case 4:
             system("cls");
-            printf("\nA sair do Ring World. At%c %c pr%cxima!\n",130,133,162);
+            printf("\nA sair do Ring World. At%c %c pr%cxima!\n", 130, 133, 162);
             saveGameToFile(players, "save1" SAVE_FILE_EXTENSION);
             Sleep(2000);
             break;
         default:
-            printf("Op%c%co Inv%clida. Escolher outra vez.\n",135,198,160);
+            printf("Op%c%co Inv%clida. Escolher outra vez.\n", 135, 198, 160);
         }
     }
 
