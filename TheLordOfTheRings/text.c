@@ -559,7 +559,33 @@ void displayActions()
     printf("2. Selecionar Unidade\n");
     printf("3. Encerrar Turno\n");
 }
-
+int settingsmenu() 
+{
+    int choice;
+    do {
+        getchar();
+        //display settings menu
+        system("cls");
+        printf("Defeni%c%ces:\n", 135, 228);
+        printf("1. Alguma coisa\n");
+        printf("2. Outra coisa\n");
+        printf("3. Sei la\n");
+        printf("4. Voltar ao menu\n");
+        printf(" >> ");
+        scanf("%d", &choice);
+        switch (choice) {
+        case 1:
+            break;
+        case 2:
+            break;
+        case 3:
+            break;
+        case 4:
+            return 0;
+            break;
+        }
+    } while (choice<1 || choice>4);
+}
 int main()
 {
 
@@ -575,8 +601,8 @@ int main()
         startverify++;
     }
 
-// start menu
-Startmenu:
+    // start menu
+    Startmenu:
     system("cls");
     printf("Bem-Vindo ao Ring World!\n\n");
     printf("1. Come%car um Novo Jogo\n", 135);
@@ -628,7 +654,8 @@ Startmenu:
         system("cls");
         printf("\nAcessando as defeni%c%ces ... \n", 135, 228);
         Sleep(2000);
-        goto Startmenu; // menu options in progress...(return to menu)
+        settingsmenu();
+        goto Startmenu;
         break;
 
     case 4:
