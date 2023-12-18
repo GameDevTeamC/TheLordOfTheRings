@@ -259,9 +259,18 @@ int actionOption() {
 char buildingsmenu() {
     int option;
 
+buildingSelect:
+    system("cls");
+    Sleep("1000");
     printf("\n1:Base == (%dcc)\n2:Mina == (%dcc)\n3:Quartel == (%dcc)\n4:Est%cbulos == (%dcc)\n5:Arsenal == (%dcc)\n >> ", BASE_COST, MINE_COST, BARRACKS_COST,160, STABLES_COST, ARMOURY_COST);
     scanf("%d", &option);
-    option -= 1;
+    if (option < 5 || option > 1)
+    {
+        printf("Escolha invalida. Escolha novamente.");
+        goto buildingSelect;
+        option -= 1;
+    }
+    
 
     return option;
 }
@@ -348,6 +357,39 @@ void displayUnitActions() {
     printf("3. Voltar\n");
     printf("Escolha a opcao:");
 }
+
+//function to select a unit from the grid
+int* selecionar(char grid[16][26])
+{
+    int x;
+    char y;
+    char position[1][1];
+
+    getchar();
+    printf("Selecione a posi%c%co da unidade (linha e coluna): ", 135, 198);
+    scanf("%d %c", &x, &y);
+
+    //checks if the selected position is within the grid bounds
+    if (x >= 1 && x <= GRID_HEIGHT && y >= 1 && y <= GRID_WIDTH)
+    {
+        //checks if there is a unit at the selected position
+        if (grid[x - 1][y - 1] != ' ') {
+            position[0][0] = x;
+            position[1][0] = y;
+            return position;//valid selection
+        }
+        else
+        {
+            printf("N%co h%c nenhuma unidade nessa posicao. Escolha novamente!\n", 198, 160);
+        }
+    }
+    else
+    {
+        printf("Posi%c%co inv%clida. Escolha novamente!\n", 135, 198, 160);
+    }
+    return 0;
+}
+
 
 /*void handleUnitActions(char grid[16][26], int playerchoice, char position[1][1]) {
     int actionChoice;
