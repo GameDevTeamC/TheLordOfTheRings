@@ -47,18 +47,6 @@ int startverify = 0;
 // player team definer
 int playerchoice;
 
-// clean array table
-void cleantable()
-{
-    for (int u = 0; u < 16; u++)
-    {
-        for (int i = 0; i < 26; i++)
-        {
-            grid[u][i] = ' ';
-        }
-    }
-}
-
 // struct info for the player side
 struct PlayerClass
 {
@@ -93,21 +81,22 @@ struct Building
     int id;
     char name[20];
     char code[4];
-    struct PlayerClass playerclass;
-    struct BuildingType buildingType;
+    struct PlayerClass* playerclass;
+    struct BuildingType* buildingType;
 };
 
 struct Building building[10] = {
-    {1, "Bases", "GGGG", 1, 1},
-    {1, "Bases", "MMMM", 2, 1},
-    {2, "Mines", "SS", 1, 2},
-    {2, "Mines", "EE", 2, 2},
-    {3, "Barracks", "RR", 1, 3},
-    {3, "Barracks", "II", 2, 3},
-    {4, "Stables", "LL", 1, 4},
-    {4, "Stables", "MK", 2, 4},
-    {5, "Armoury", "GF", 1, 5},
-    {5, "Armoury", "DF", 2, 5}};
+    {1, "Bases", "GGGG", &playerClass[0], &buildingType[0]},    
+    {2, "Mines", "SS", &playerClass[0], &buildingType[1]},   
+    {3, "Barracks", "RR", &playerClass[0], &buildingType[2]},   
+    {4, "Stables", "LL", &playerClass[0], &buildingType[3]},  
+    {5, "Armoury", "GF", &playerClass[0], &buildingType[4]},
+    {1, "Bases", "MMMM", &playerClass[1], &buildingType[0]},
+    {2, "Mines", "EE", &playerClass[1], &buildingType[1]},
+    {3, "Barracks", "II", &playerClass[1], &buildingType[2]},
+    {4, "Stables", "MK", &playerClass[1], &buildingType[3]},
+    {5, "Armoury", "DF", &playerClass[1], &buildingType[4]}
+};
 
 // struct info for the unit type
 struct UnitType
@@ -131,27 +120,28 @@ struct Unit
     int id;
     char name[100];
     char code[100];
-    struct PlayerClass playerclass;
-    struct UnitType unitType;
+    struct PlayerClass *playerclass;
+    struct UnitType *unitType;
     int x, y;
 };
 
 struct Unit unit[6] = {
-    {1, "Infantry", "G", 1, 1},
-    {2, "Cavalry", "SK", 1, 2},
-    {3, "Artillery", "T", 1, 3},
-    {4, "Infantry", "OW", 2, 1},
-    {5, "Cavalry", "W", 2, 2},
-    {6, "Artillery", "ST", 2, 3}};
+    {1, "Infantry", "G", &playerClass[0], &unitType[0], 1, 1},
+    {2, "Cavalry", "SK", &playerClass[0], &unitType[1], 1, 2},
+    {3, "Artillery", "T", &playerClass[0], &unitType[2], 1, 3},
+    {1, "Infantry", "OW", &playerClass[1], &unitType[0], 2, 1},
+    {2, "Cavalry", "W", &playerClass[1], &unitType[1], 2, 2},
+    {3, "Artillery", "ST", &playerClass[1], &unitType[2], 2, 3}
+};
 
 // struct info player
 struct Player
 {
     int id;
     int coins;
-    struct PlayerClass playerClass;
-    struct Unit unit;
-    struct Building building;
+    struct PlayerClass *playerClass;
+    struct Unit *unit;
+    struct Building *building;
 };
 
 struct Player players[2];
@@ -171,7 +161,19 @@ void posicionar(char grid[16][26], int currentplayer, int playerclass);
 int *selecionar(char grid[16][26]);
 void saveGameToFile(struct Player players[2], const char *saveFileName);
 void loadGameFromFile(struct Player players[2], const char *loadFileName);
-void playerRegister(int option, struct PlayerClass playerClass[]);
+void playerRegister(int option);
+
+// clean array table
+void cleantable()
+{
+    for (int u = 0; u < 16; u++)
+    {
+        for (int i = 0; i < 26; i++)
+        {
+            grid[u][i] = ' ';
+        }
+    }
+}
 
 void saveGameToFile(struct Player players[2], const char *saveFileName)
 {
@@ -186,8 +188,8 @@ void saveGameToFile(struct Player players[2], const char *saveFileName)
             fprintf(file, "  ID: %d\n", players[i].id);
             fprintf(file, "  Coins: %d\n", players[i].coins);
             fprintf(file, "  Player Class:\n");
-            fprintf(file, "    ID: %d\n", players[i].playerClass.id);
-            fprintf(file, "    Name: %s\n", players[i].playerClass.name);
+            fprintf(file, "    ID: %d\n", players[i].playerClass->id);
+            fprintf(file, "    Name: %s\n", players[i].playerClass->name);
         }
 
         fclose(file);
@@ -214,8 +216,8 @@ void loadGameFromFile(struct Player players[2], const char *loadFileName)
             fscanf(file, "  ID: %d\n", &players[i].id);
             fscanf(file, "  Coins: %d\n", &players[i].coins);
             fscanf(file, "  Player Class:\n");
-            fscanf(file, "    ID: %d\n", &players[i].playerClass.id);
-            fscanf(file, "    Name: %s\n", players[i].playerClass.name);
+            fscanf(file, "    ID: %d\n", &players[i].playerClass->id);
+            fscanf(file, "    Name: %s\n", players[i].playerClass->name);
         }
 
         fclose(file);
@@ -227,26 +229,26 @@ void loadGameFromFile(struct Player players[2], const char *loadFileName)
     }
 }
 
-void playerRegister(int option, struct PlayerClass playerClass[])
+void playerRegister(int option)
 {
 
     if (option == 1)
     {
         players[0].id = 1;
         players[0].coins = INITIAL_CASTAR_COINS;
-        players[0].playerClass = playerClass[option - 1];
+        players[0].playerClass = &playerClass[option - 1];
         players[1].id = 2;
         players[1].coins = INITIAL_CASTAR_COINS;
-        players[1].playerClass = playerClass[option];
+        players[1].playerClass = &playerClass[option];
     }
     else
     {
         players[0].id = 1;
         players[0].coins = INITIAL_CASTAR_COINS;
-        players[0].playerClass = playerClass[option - 1];
+        players[0].playerClass = &playerClass[option - 1];
         players[1].id = 2;
         players[1].coins = INITIAL_CASTAR_COINS;
-        players[1].playerClass = playerClass[option - 2];
+        players[1].playerClass = &playerClass[option - 2];
     }
 }
 
@@ -283,7 +285,6 @@ buildingSelect:
         Sleep(2000);
         goto buildingSelect;
     }
-    option -= 1;
 
     return option;
 }
@@ -303,7 +304,6 @@ unitSelect:
         Sleep(2000);
         goto unitSelect;
     }
-    option -= 1;
 
     return option;
 }
@@ -312,14 +312,14 @@ unitSelect:
 void posicionar(char grid_a[16][26], int currentPlayer, int playerclass)
 {
     char letrapos, carater;
-    int numpos, option;
+    int numpos, option, buildingId, unitId;
 
     option = actionOption();
 
     if (option == 1)
-        option = buildingsmenu();
+        buildingId = buildingsmenu();
     else
-        option = unitMenu();
+        unitId = unitMenu();
 
 selectnumpos:
     printf("\nSelecione a posi%c%co\nN%cmero: ", 135, 198, 163);
@@ -342,37 +342,66 @@ selectletrapos:
     numpos -= 1;
     letrapos -= 97;
 
-    for (int i = 0; i < 2; i++)
+    if (option == 1)
     {
-        if (players[currentPlayer].playerClass.id == playerClass[i].id)
+        for (int i = 0; i < 10; i++)
         {
-            for (int j = 0; j < 2; j++)
+            if (players[currentPlayer].playerClass->id == building[i].playerclass->id && building[i].id == buildingId)
             {
-                if (building[j].playerclass.id == playerClass[i].id)
+                int size = strlen(building[i].code);
+                int verify = (letrapos + size);
+                int aux = verify - 26;
+
+                players[currentPlayer].coins -= building[i].buildingType->buyCost;
+
+                if (verify > 26)
                 {
-                    int size = strlen(building[j].code);
-                    int verify = (letrapos + size);
-                    int aux = verify - 26;
-
-                    players[currentPlayer].coins -= building[j].buildingType.buyCost;
-
-                    buildingType[2].id;
-
-                    if (verify > 26)
+                    letrapos -= aux;
+                    for (int h = 0; h < size; h++)
                     {
-                        letrapos -= aux;
-                        for (int h = 0; h < size; h++)
-                        {
-                            grid_a[numpos][letrapos++] = building[j].code[h];
-                        }
+                        grid_a[numpos][letrapos++] = building[i].code[h];
                     }
-                    else
+                    i = 10;
+                }
+                else
+                {
+                    for (int h = 0; h < size; h++)
                     {
-                        for (int h = 0; h < size; h++)
-                        {
-                            grid_a[numpos][letrapos++] = building[j].code[h];
-                        }
+                        grid_a[numpos][letrapos++] = building[i].code[h];
                     }
+                    i = 10;
+                }
+            }
+        }
+    }
+    else 
+    {
+        for (int i = 0; i < 6; i++)
+        {
+            if (unit[i].playerclass->id == players[currentPlayer].playerClass->id && unit[i].id == unitId)
+            {
+                int size = strlen(unit[i].code);
+                int verify = (letrapos + size);
+                int aux = verify - 26;
+
+                players[currentPlayer].coins -= unit[i].unitType->buyCost;
+
+                if (verify > 26)
+                {
+                    letrapos -= aux;
+                    for (int h = 0; h < size; h++)
+                    {
+                        grid_a[numpos][letrapos++] = unit[i].code[h];
+                    }
+                    i = 6;
+                }
+                else
+                {
+                    for (int h = 0; h < size; h++)
+                    {
+                        grid_a[numpos][letrapos++] = unit[i].code[h];
+                    }
+                    i = 6;
                 }
             }
         }
@@ -559,6 +588,7 @@ void displayActions()
     printf("2. Selecionar Unidade\n");
     printf("3. Encerrar Turno\n");
 }
+
 int settingsmenu() 
 {
     int choice;
@@ -681,7 +711,7 @@ int main()
         char position[1][1];
 
         displayGrid();
-        printf("Vez do jogador %d (%s)\n", playerchoice,players[playerchoice-1].playerClass.name);
+        printf("Vez do jogador %d (%s)\n", players[currentPlayer].id, players[currentPlayer].playerClass->name);
         printf("Castar Coins: %d\n", players[currentPlayer].coins);
 
         displayActions();
@@ -723,15 +753,13 @@ int main()
             }
             break;
         case 3:
-            // End turn
-            // Switch players
-            if (playerchoice == 1)
+            if (currentPlayer == 0)
             {
-                playerchoice = 2;
+                currentPlayer = 1;
             }
-            else if (playerchoice == 2)
+            else if (currentPlayer == 1)
             {
-                playerchoice = 1;
+                currentPlayer = 0;
             }
             break;
         case 4:
