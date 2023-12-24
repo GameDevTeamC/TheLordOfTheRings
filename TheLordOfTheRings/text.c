@@ -83,6 +83,7 @@ struct Building
     char code[4];
     struct PlayerClass* playerclass;
     struct BuildingType* buildingType;
+    int x, y;
 };
 
 struct Building building[10] = {
@@ -140,8 +141,8 @@ struct Player
     int id;
     int coins;
     struct PlayerClass *playerClass;
-    struct Unit *unit;
-    struct Building *building;
+    struct Unit *unit[100];
+    struct Building *building[100];
 };
 
 struct Player players[2];
@@ -155,6 +156,8 @@ struct GameState
 
 // declarate functions
 void cleantable();
+int countBuildings();
+int countUnits();
 void displayGrid();
 void displayActions();
 void posicionar(char grid[16][26], int currentplayer, int playerclass);
@@ -175,21 +178,54 @@ void cleantable()
     }
 }
 
-void saveGameToFile(struct Player players[2], const char *saveFileName)
+void saveGameToFile(struct Player players[2], const char *saveFileName, int currentPlayer)
 {
     FILE *file = fopen(saveFileName, "wb");
+
+    int numUnits = 0, numBuildings = 0;
+
+    //players[currentPlayer].building[numBuildings] = malloc(sizeof(struct Building*));
 
     if (file != NULL)
     {
         // Save player data
         for (int i = 0; i < 2; ++i)
         {
+            numUnits = countUnits(i);
+            numBuildings = countBuildings(i);
+
+            if (i > 0)
+                fprintf(file, "\n--------------- // -------------\n");
+
             fprintf(file, "Player %d:\n", i + 1);
             fprintf(file, "  ID: %d\n", players[i].id);
             fprintf(file, "  Coins: %d\n", players[i].coins);
             fprintf(file, "  Player Class:\n");
             fprintf(file, "    ID: %d\n", players[i].playerClass->id);
             fprintf(file, "    Name: %s\n", players[i].playerClass->name);
+            
+
+            if (numBuildings > 0)
+            {
+                fprintf(file, "  Player Buildings:\n");
+                for (int j = 0; j < numBuildings; j++)
+                {
+                    fprintf(file, "    ID: %d\n", players[i].building[j]->id);
+                    fprintf(file, "    X: %d\n", players[i].building[j]->x);
+                    fprintf(file, "    Y: %d\n", players[i].building[j]->y);
+                }
+            }
+
+            if (numUnits > 0)
+            {
+                fprintf(file, "  Player Units:\n");
+                for (int j = 0; j < numUnits; j++)
+                {
+                    fprintf(file, "    ID: %d\n", players[i].unit[j]->id);
+                    fprintf(file, "    X: %d\n", players[i].unit[j]->x);
+                    fprintf(file, "    Y: %d\n", players[i].unit[j]->y);
+                }
+            }
         }
 
         fclose(file);
@@ -289,6 +325,21 @@ buildingSelect:
     return option;
 }
 
+int countBuildings(int currentPlayer)
+{
+    int count = 0;
+
+    for (int i = 0; i < 100; i++)
+    {
+        if (players[currentPlayer].building[i] != NULL)
+        {
+            count++;
+        }
+    }
+
+    return count;
+}
+
 int unitMenu()
 {
     int option;
@@ -308,12 +359,29 @@ unitSelect:
     return option;
 }
 
-// Function to position the buildings
-void posicionar(char grid_a[16][26], int currentPlayer, int playerclass)
+int countUnits(int currentPlayer)
 {
-    char letrapos, carater;
-    int numpos, option, buildingId, unitId;
+    int count = 0;
 
+    for (int i = 0; i < 100; i++)
+    {
+        if (players[currentPlayer].unit[i] != NULL)
+        {
+            count++;
+        }
+    }
+
+    return count;
+}
+
+// Função para posicionar as construções e unidades
+void posicionar(char grid_a[16][26], int currentPlayer)
+{
+    char letrapos;
+    int numpos, option, buildingId, unitId, numUnits = 0, numBuildings = 0;
+
+    numUnits = countUnits(currentPlayer);
+    numBuildings = countBuildings(currentPlayer);
     option = actionOption();
 
     if (option == 1)
@@ -352,29 +420,43 @@ selectletrapos:
                 int verify = (letrapos + size);
                 int aux = verify - 26;
 
+                // Aloca memória para a construção no jogador
+                players[currentPlayer].building[numBuildings] = malloc(sizeof(struct Building*));
+
                 players[currentPlayer].coins -= building[i].buildingType->buyCost;
 
                 if (verify > 26)
                 {
                     letrapos -= aux;
+
+                    players[currentPlayer].building[numBuildings]->id = building[i].id;
+                    players[currentPlayer].building[numBuildings]->x = letrapos;
+                    players[currentPlayer].building[numBuildings]->y = numpos;
+                    //strcpy(players[currentPlayer].building[numUnits]->code, building[i].code);
+
                     for (int h = 0; h < size; h++)
-                    {
+                    {                      
                         grid_a[numpos][letrapos++] = building[i].code[h];
                     }
-                    i = 10;
                 }
                 else
                 {
+
+                    players[currentPlayer].building[numBuildings]->id = building[i].id;
+                    players[currentPlayer].building[numBuildings]->x = letrapos;
+                    players[currentPlayer].building[numBuildings]->y = numpos;
+
                     for (int h = 0; h < size; h++)
                     {
                         grid_a[numpos][letrapos++] = building[i].code[h];
                     }
-                    i = 10;
                 }
+                numBuildings++;
+                break;
             }
         }
     }
-    else 
+    else
     {
         for (int i = 0; i < 6; i++)
         {
@@ -384,29 +466,44 @@ selectletrapos:
                 int verify = (letrapos + size);
                 int aux = verify - 26;
 
+                // Aloca memória para a unidade no jogador
+                players[currentPlayer].unit[numUnits] = malloc(sizeof(struct Unit*));
+
                 players[currentPlayer].coins -= unit[i].unitType->buyCost;
 
                 if (verify > 26)
                 {
                     letrapos -= aux;
+
+                    players[currentPlayer].unit[numUnits]->id = unit[i].id;
+                    players[currentPlayer].unit[numUnits]->x = letrapos;
+                    players[currentPlayer].unit[numUnits]->y = numpos;
+
                     for (int h = 0; h < size; h++)
                     {
                         grid_a[numpos][letrapos++] = unit[i].code[h];
                     }
-                    i = 6;
                 }
                 else
                 {
+
+                    players[currentPlayer].unit[numUnits]->id = unit[i].id;
+                    players[currentPlayer].unit[numUnits]->x = letrapos;
+                    players[currentPlayer].unit[numUnits]->y = numpos;
+
                     for (int h = 0; h < size; h++)
-                    {
+                    {                       
                         grid_a[numpos][letrapos++] = unit[i].code[h];
                     }
-                    i = 6;
                 }
+                numUnits++;
+                break;
             }
         }
     }
 }
+
+
 // function to display the unit actions after being select
 void displayUnitActions()
 {
@@ -691,7 +788,7 @@ int main()
     case 4:
         system("cls");
         printf("\nA sair do Ring World. At%c %c pr%cxima!\n", 130, 133, 162);
-        saveGameToFile(players, "save1" SAVE_FILE_EXTENSION);
+        saveGameToFile(players, "save1" SAVE_FILE_EXTENSION, currentPlayer);
         Sleep(2000);
         break;
 
@@ -765,7 +862,7 @@ int main()
         case 4:
             system("cls");
             printf("\nA sair do Ring World. At%c %c pr%cxima!\n", 130, 133, 162);
-            saveGameToFile(players, "save1" SAVE_FILE_EXTENSION);
+            saveGameToFile(players, "save1" SAVE_FILE_EXTENSION, currentPlayer);
             Sleep(2000);
             break;
         default:
