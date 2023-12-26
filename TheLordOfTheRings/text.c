@@ -81,23 +81,22 @@ struct Building
     int id;
     char name[20];
     char code[4];
-    struct PlayerClass* playerclass;
-    struct BuildingType* buildingType;
+    struct PlayerClass *playerclass;
+    struct BuildingType *buildingType;
     int x, y;
 };
 
 struct Building building[10] = {
-    {1, "Bases", "GGGG", &playerClass[0], &buildingType[0]},    
-    {2, "Mines", "SS", &playerClass[0], &buildingType[1]},   
-    {3, "Barracks", "RR", &playerClass[0], &buildingType[2]},   
-    {4, "Stables", "LL", &playerClass[0], &buildingType[3]},  
+    {1, "Bases", "GGGG", &playerClass[0], &buildingType[0]},
+    {2, "Mines", "SS", &playerClass[0], &buildingType[1]},
+    {3, "Barracks", "RR", &playerClass[0], &buildingType[2]},
+    {4, "Stables", "LL", &playerClass[0], &buildingType[3]},
     {5, "Armoury", "GF", &playerClass[0], &buildingType[4]},
     {1, "Bases", "MMMM", &playerClass[1], &buildingType[0]},
     {2, "Mines", "EE", &playerClass[1], &buildingType[1]},
     {3, "Barracks", "II", &playerClass[1], &buildingType[2]},
     {4, "Stables", "MK", &playerClass[1], &buildingType[3]},
-    {5, "Armoury", "DF", &playerClass[1], &buildingType[4]}
-};
+    {5, "Armoury", "DF", &playerClass[1], &buildingType[4]}};
 
 // struct info for the unit type
 struct UnitType
@@ -132,8 +131,7 @@ struct Unit unit[6] = {
     {3, "Artillery", "T", &playerClass[0], &unitType[2], 1, 3},
     {1, "Infantry", "OW", &playerClass[1], &unitType[0], 2, 1},
     {2, "Cavalry", "W", &playerClass[1], &unitType[1], 2, 2},
-    {3, "Artillery", "ST", &playerClass[1], &unitType[2], 2, 3}
-};
+    {3, "Artillery", "ST", &playerClass[1], &unitType[2], 2, 3}};
 
 // struct info player
 struct Player
@@ -184,7 +182,7 @@ void saveGameToFile(struct Player players[2], const char *saveFileName, int curr
 
     int numUnits = 0, numBuildings = 0;
 
-    //players[currentPlayer].building[numBuildings] = malloc(sizeof(struct Building*));
+    // players[currentPlayer].building[numBuildings] = malloc(sizeof(struct Building*));
 
     if (file != NULL)
     {
@@ -203,7 +201,6 @@ void saveGameToFile(struct Player players[2], const char *saveFileName, int curr
             fprintf(file, "  Player Class:\n");
             fprintf(file, "    ID: %d\n", players[i].playerClass->id);
             fprintf(file, "    Name: %s\n", players[i].playerClass->name);
-            
 
             if (numBuildings > 0)
             {
@@ -310,17 +307,15 @@ char buildingsmenu()
 {
     int option;
 
-buildingSelect:
-    system("cls");
-    displayGrid();
-    printf("\n1:Base == (%dcc)\n2:Mina == (%dcc)\n3:Quartel == (%dcc)\n4:Est%cbulos == (%dcc)\n5:Arsenal == (%dcc)\n >> ", BASE_COST, MINE_COST, BARRACKS_COST, 160, STABLES_COST, ARMOURY_COST);
-    scanf("%d", &option);
-    if (option > 5 || option < 1)
+    do
     {
-        printf("Escolha invalida. Selecione uma opcao valida.");
-        Sleep(2000);
-        goto buildingSelect;
-    }
+
+        system("cls");
+        displayGrid();
+        printf("\n1:Base == (%dcc)\n2:Mina == (%dcc)\n3:Quartel == (%dcc)\n4:Est%cbulos == (%dcc)\n5:Arsenal == (%dcc)\n >> ", BASE_COST, MINE_COST, BARRACKS_COST, 160, STABLES_COST, ARMOURY_COST);
+        scanf("%d", &option);
+
+    } while (option > 5 || option < 1);
 
     return option;
 }
@@ -344,17 +339,15 @@ int unitMenu()
 {
     int option;
 
-unitSelect:
-    system("cls");
-    displayGrid();
-    printf("\n1:Infantaria == (%dcc)\n2:Cavalaria == (%dcc)\n3:Artilharia == (%dcc)\n >>", INFANTRY_COST, CAVALRY_COST, ARTILLERY_COST);
-    scanf("%d", &option);
-    if (option > 3 || option < 1)
+    do
     {
-        printf("Escolha invalida. Selecione uma opcao valida.");
-        Sleep(2000);
-        goto unitSelect;
-    }
+
+        system("cls");
+        displayGrid();
+        printf("\n1:Infantaria == (%dcc)\n2:Cavalaria == (%dcc)\n3:Artilharia == (%dcc)\n >>", INFANTRY_COST, CAVALRY_COST, ARTILLERY_COST);
+        scanf("%d", &option);
+
+    } while (option > 3 || option < 1);
 
     return option;
 }
@@ -389,23 +382,19 @@ void posicionar(char grid_a[16][26], int currentPlayer)
     else
         unitId = unitMenu();
 
-selectnumpos:
-    printf("\nSelecione a posi%c%co\nN%cmero: ", 135, 198, 163);
-    scanf("%d", &numpos);
-
-    if (numpos > 16 || numpos < 0)
+    do
     {
-        goto selectnumpos;
-    }
+        printf("\nSelecione a posi%c%co\nN%cmero: ", 135, 198, 163);
+        scanf("%d", &numpos);
+    } while (numpos > 16 || numpos < 0);
 
-selectletrapos:
-    getchar();
-    printf("\nLetra: ");
-    scanf("%c", &letrapos);
-    if (letrapos > 122 || letrapos < 97)
+    do
     {
-        goto selectletrapos;
-    }
+        getchar();
+        printf("\nLetra: ");
+        scanf("%c", &letrapos);
+
+    } while (letrapos > 122 || letrapos < 97);
 
     numpos -= 1;
     letrapos -= 97;
@@ -421,7 +410,7 @@ selectletrapos:
                 int aux = verify - 26;
 
                 // Aloca memória para a construção no jogador
-                players[currentPlayer].building[numBuildings] = malloc(sizeof(struct Building*));
+                players[currentPlayer].building[numBuildings] = malloc(sizeof(struct Building *));
 
                 players[currentPlayer].coins -= building[i].buildingType->buyCost;
 
@@ -432,10 +421,10 @@ selectletrapos:
                     players[currentPlayer].building[numBuildings]->id = building[i].id;
                     players[currentPlayer].building[numBuildings]->x = letrapos;
                     players[currentPlayer].building[numBuildings]->y = numpos;
-                    //strcpy(players[currentPlayer].building[numUnits]->code, building[i].code);
+                    // strcpy(players[currentPlayer].building[numUnits]->code, building[i].code);
 
                     for (int h = 0; h < size; h++)
-                    {                      
+                    {
                         grid_a[numpos][letrapos++] = building[i].code[h];
                     }
                 }
@@ -467,7 +456,7 @@ selectletrapos:
                 int aux = verify - 26;
 
                 // Aloca memória para a unidade no jogador
-                players[currentPlayer].unit[numUnits] = malloc(sizeof(struct Unit*));
+                players[currentPlayer].unit[numUnits] = malloc(sizeof(struct Unit *));
 
                 players[currentPlayer].coins -= unit[i].unitType->buyCost;
 
@@ -492,7 +481,7 @@ selectletrapos:
                     players[currentPlayer].unit[numUnits]->y = numpos;
 
                     for (int h = 0; h < size; h++)
-                    {                       
+                    {
                         grid_a[numpos][letrapos++] = unit[i].code[h];
                     }
                 }
@@ -502,7 +491,6 @@ selectletrapos:
         }
     }
 }
-
 
 // function to display the unit actions after being select
 void displayUnitActions()
@@ -522,7 +510,6 @@ int *selecionar(char grid[16][26])
     char position[1][1];
 
 selectUnit:
-
     getchar();
     printf("Selecione a posi%c%co da unidade (numero e letra): ", 135, 198);
     scanf("%d %c", &x, &y);
@@ -686,12 +673,13 @@ void displayActions()
     printf("3. Encerrar Turno\n");
 }
 
-int settingsmenu() 
+int settingsmenu()
 {
     int choice;
-    do {
+    do
+    {
         getchar();
-        //display settings menu
+        // display settings menu
         system("cls");
         printf("Defeni%c%ces:\n", 135, 228);
         printf("1. Alguma coisa\n");
@@ -700,7 +688,8 @@ int settingsmenu()
         printf("4. Voltar ao menu\n");
         printf(" >> ");
         scanf("%d", &choice);
-        switch (choice) {
+        switch (choice)
+        {
         case 1:
             break;
         case 2:
@@ -711,7 +700,7 @@ int settingsmenu()
             return 0;
             break;
         }
-    } while (choice<1 || choice>4);
+    } while (choice < 1 || choice > 4);
 }
 int main()
 {
@@ -728,8 +717,8 @@ int main()
         startverify++;
     }
 
-    // start menu
-    Startmenu:
+// start menu
+Startmenu:
     system("cls");
     printf("Bem-Vindo ao Ring World!\n\n");
     printf("1. Come%car um Novo Jogo\n", 135);
