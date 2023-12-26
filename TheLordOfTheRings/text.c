@@ -37,6 +37,7 @@
 #include <string.h>
 #include <time.h>
 #include <windows.h>
+#include <stdbool.h>
 
 // array for table positions
 char grid[16][26];
@@ -162,6 +163,10 @@ void displayGrid();
 void displayActions();
 void posicionar(char grid[16][26], int currentplayer, int playerclass);
 int *selecionar(char grid[16][26]);
+void moverPeca(char grid[GRID_HEIGHT][GRID_WIDTH], int currentPlayer, struct PlayerClass* playerClass);
+bool isValidCoordinate(int row, char col);
+int convertToGridIndex(char col);
+int findUnitIndexByCode(const char* code, int playerClassId);
 void saveGameToFile(struct Player players[2], const char *saveFileName);
 void loadGameFromFile(struct Player players[2], const char *loadFileName);
 void playerRegister(int option);
@@ -515,26 +520,30 @@ void displayUnitActions()
     printf("Escolha a opcao:");
 }
 
-int *selecionar(char grid[16][26])
+int* selecionar(char grid[16][26])
 {
-    int x;
-    char y;
-    char position[1][1];
+    char c;
+    int l;
+    char position[2][1];
 
 selectUnit:
 
     getchar();
     printf("Selecione a posi%c%co da unidade (numero e letra): ", 135, 198);
-    scanf("%d %c", &x, &y);
+    scanf("%d %c", &l, &c);
+
 
     // checks if the selected position is within the grid bounds
-    if (x >= 1 && x <= GRID_HEIGHT && y >= 1 && y <= GRID_WIDTH)
+    if (c >= 'a' && c <= 'z' && l >= 1 && l <= GRID_HEIGHT)
     {
+        c -= 'a';
+        l -= 1;
+        
         // checks if there is a unit at the selected position
-        if (grid[x - 1][y - 1] != ' ')
+        if (grid[l][c] != ' ')
         {
-            position[0][0] = x;
-            position[1][0] = y;
+            position[0][0] = l - 1;
+            position[1][0] = c - 'a';
             return position; // valid selection
         }
         else
@@ -553,59 +562,86 @@ selectUnit:
     return 0;
 }
 
-/*void move(char grid[16][26], int playerchoice, int postition[1][1])
+// Função para mover uma peça
+void moverPeca(char grid[16][26], int currentPlayer)
 {
-    int x = 0;
-    int new_x = 0;
-    char new_y;
-    char y = ' ';
+    char fromC, toC;
+    int fromL, toL;
 
-    getchar();
-    printf("Digite a nova posicao da unidade selecionada (linha e coluna): ");
-    scanf("%d %c", &new_x, &new_y);
+    // as coordenadas da peça a ser movida
+    printf("Digite as coordenadas da peça a ser movida (linha/coluna): ");
+    scanf("%d %c", &fromL, &fromC);
 
-    if (new_x >= 1 && new_x <= GRID_HEIGHT && (new_y >= 'a' || new_y >= 'A') && (new_y <= 'z' || new_y <= 'Z')) {
-        // Check if the new position is empty
-        if (grid[new_x - 1][new_y - 1] == ' ') {
-            // Determine the movement cost based on the type of unit
-            int movementCost;
-            switch (grid[x - 1][y - 1]) {
-            case 'I': // Infantry
-                movementCost = INFANTRY_MOVEMENT_COST;
-                break;
-            case 'C': // Cavalry
-                movementCost = CAVALRY_MOVEMENT_COST;
-                break;
-            case 'A': // Artillery
-                movementCost = ARTILLERY_MOVEMENT_COST;
-                break;
-            default:
-                movementCost = 0; // Default cost for unknown units
-            }
+    // as coordenadas para onde a peça será movida
+    printf("Digite as coordenadas para onde a peça será movida (linha/coluna): ");
+    scanf("%d %c", &toL, &toC);
 
-            // Check if the player has enough coins to cover the movement cost
-            if (player.coins >= movementCost) {
-                // Move the unit to the new position
-                grid[new_x - 1][new_y - 1] = grid[x - 1][y - 1];
-                grid[x - 1][y - 1] = ' ';
-
-                // Deduct the movement cost from the player's coins
-                player.coins -= movementCost;
-
-                printf("Unidade movida com sucesso para %d, %d. Custo de movimento: %d coins\n", new_x, new_y, movementCost);
-            }
-            else {
-                printf("Saldo insuficiente. Nao e possível mover a unidade para %d, %d.\n", new_x, new_y);
-            }
-        }
-        else {
-            printf("Posicao ocupada. Escolha uma posição valida.\n");
-        }
+    // Validate coordinates
+    if (!isValidCoordinate(fromL, fromC) || !isValidCoordinate(toL, toC)) {
+        printf("Invalid coordinates. Please try again.\n");
+        return;
     }
+
+    // Convert coordinates to grid indices
+    fromC = convertToGridIndex(fromC);
+    toC = convertToGridIndex(toC);
+    fromL--;
+    toL--;
+
+    // Copy the piece code until an empty field is found
+    char code[5];
+    int i, j;
+    for (i = fromC, j = 0; i < GRID_WIDTH && grid[fromL][i] != ' '; i++, j++) {
+        code[j] = grid[fromL][i];
+    }
+    code[j] = '\0';
+
+    // Move the piece to the new position
+    int size = strlen(code);
+    for (int h = 0; h < size; h++) {
+        grid[toL][toC + h] = code[h];
+    }
+
+    // Clear the source position
+    for (int h = fromC; h < GRID_WIDTH && grid[fromL][h] != ' '; h++) {
+        grid[fromL][h] = ' ';
+    }
+
+    int unitIndex = findUnitIndexByCode(code, players[currentPlayer].playerClass->id);
+
+     if (unitIndex != -1) {
+        // Update the x and y coordinates of the moved unit
+        players[currentPlayer].unit[unitIndex] = malloc(sizeof(struct Unit*));
+        players[currentPlayer].unit[unitIndex]->x = toC;
+        players[currentPlayer].unit[unitIndex]->y = toL;
+
+        // Display success message
+        printf("Unit moved successfully!\n");
+     }
     else {
-        printf("Posicao invalida. Escolha uma posicao dentro dos limites do tabuleiro.\n");
+        printf("Invalid piece. Please select a valid piece.\n");
     }
-}*/
+}
+
+
+// Helper function to check if coordinates are valid
+bool isValidCoordinate(int row, char col) {
+    return (col >= 'a' && col <= 'z' || col >= 'A' && col <= 'Z') && row >= 1 && row <= GRID_HEIGHT;
+}
+
+// Helper function to convert column character to grid index
+int convertToGridIndex(char col) {
+    return (col >= 'a' && col <= 'z') ? (col - 'a') : (col - 'A');
+}
+
+int findUnitIndexByCode(const char* code, int playerClassId) {
+    for (int i = 0; i < 6; i++) {
+        if (unit[i].playerclass->id == playerClassId && strcmp(unit[i].code, code) == 0) {
+            return i;
+        }
+    }
+    return -1; // Unit not found
+}
 
 void displayGrid()
 {
@@ -834,13 +870,15 @@ int main()
                 switch (choice)
                 {
                 case 1:
+                    moverPeca(grid, currentPlayer, playerClass);
                     system("cls");
                     displayGrid();
-                    // mover();
+                    break;
                 case 2:
                     system("cls");
                     displayGrid();
                     // atacar();
+                    break;
                 default:
                     break;
                 }
