@@ -161,10 +161,10 @@ void displayGrid();
 void displayActions();
 void posicionar(char grid[16][26], int currentplayer, int playerclass);
 int *selecionar(char grid[16][26]);
-void moverPeca(char grid[GRID_HEIGHT][GRID_WIDTH], int currentPlayer, struct PlayerClass* playerClass);
+void moverPeca(char grid[GRID_HEIGHT][GRID_WIDTH], int currentPlayer, struct PlayerClass *playerClass);
 bool isValidCoordinate(int row, char col);
 int convertToGridIndex(char col);
-int findUnitIndexByCode(const char* code, int playerClassId);
+int findUnitIndexByCode(const char *code, int playerClassId);
 void saveGameToFile(struct Player players[2], const char *saveFileName);
 void loadGameFromFile(struct Player players[2], const char *loadFileName);
 void playerRegister(int option);
@@ -508,47 +508,6 @@ void displayUnitActions()
     printf("Escolha a opcao:");
 }
 
-int* selecionar(char grid[16][26])
-{
-    char c;
-    int l;
-    char position[2][1];
-
-selectUnit:
-    getchar();
-    printf("Selecione a posi%c%co da unidade (numero e letra): ", 135, 198);
-    scanf("%d %c", &l, &c);
-
-
-    // checks if the selected position is within the grid bounds
-    if (c >= 'a' && c <= 'z' && l >= 1 && l <= GRID_HEIGHT)
-    {
-        c -= 'a';
-        l -= 1;
-        
-        // checks if there is a unit at the selected position
-        if (grid[l][c] != ' ')
-        {
-            position[0][0] = l - 1;
-            position[1][0] = c - 'a';
-            return position; // valid selection
-        }
-        else
-        {
-            printf("N%co h%c nenhuma unidade nessa posicao. Escolha novamente!\n", 198, 160);
-        }
-    }
-    else
-    {
-        printf("Posi%c%co inv%clida. Escolha novamente!\n", 135, 198, 160);
-        Sleep(2000);
-        system("cls");
-        displayGrid();
-        goto selectUnit;
-    }
-    return 0;
-}
-
 // Função para mover uma peça
 void moverPeca(char grid[16][26], int currentPlayer)
 {
@@ -564,7 +523,8 @@ void moverPeca(char grid[16][26], int currentPlayer)
     scanf("%d %c", &toL, &toC);
 
     // Validate coordinates
-    if (!isValidCoordinate(fromL, fromC) || !isValidCoordinate(toL, toC)) {
+    if (!isValidCoordinate(fromL, fromC) || !isValidCoordinate(toL, toC))
+    {
         printf("Invalid coordinates. Please try again.\n");
         return;
     }
@@ -578,19 +538,22 @@ void moverPeca(char grid[16][26], int currentPlayer)
     // Copy the piece code until an empty field is found
     char code[5];
     int i, j;
-    for (i = fromC, j = 0; i < GRID_WIDTH && grid[fromL][i] != ' '; i++, j++) {
+    for (i = fromC, j = 0; i < GRID_WIDTH && grid[fromL][i] != ' '; i++, j++)
+    {
         code[j] = grid[fromL][i];
     }
     code[j] = '\0';
 
     // Move the piece to the new position
     int size = strlen(code);
-    for (int h = 0; h < size; h++) {
+    for (int h = 0; h < size; h++)
+    {
         grid[toL][toC + h] = code[h];
     }
 
     // Clear the source position
-    for (int h = fromC; h < GRID_WIDTH && grid[fromL][h] != ' '; h++) {
+    for (int h = fromC; h < GRID_WIDTH && grid[fromL][h] != ' '; h++)
+    {
         grid[fromL][h] = ' ';
     }
 
@@ -600,7 +563,7 @@ void moverPeca(char grid[16][26], int currentPlayer)
 
      if (unitIndex != -1 && players[currentPlayer].unit[unitIndex] != NULL) {
         // Update the x and y coordinates of the moved unit
-        players[currentPlayer].unit[unitIndex] = malloc(sizeof(struct Unit*));
+        players[currentPlayer].unit[unitIndex] = malloc(sizeof(struct Unit *));
         players[currentPlayer].unit[unitIndex]->x = toC;
         players[currentPlayer].unit[unitIndex]->y = toL;
      }
@@ -609,24 +572,36 @@ void moverPeca(char grid[16][26], int currentPlayer)
     }
 }
 
-
 // Helper function to check if coordinates are valid
-bool isValidCoordinate(int row, char col) {
+bool isValidCoordinate(int row, char col)
+{
     return (col >= 'a' && col <= 'z' || col >= 'A' && col <= 'Z') && row >= 1 && row <= GRID_HEIGHT;
 }
 
 // Helper function to convert column character to grid index
-int convertToGridIndex(char col) {
+int convertToGridIndex(char col)
+{
     return (col >= 'a' && col <= 'z') ? (col - 'a') : (col - 'A');
 }
 
-int findUnitIndexByCode(const char* code, int playerClassId) {
-    for (int i = 0; i < 6; i++) {
-        if (unit[i].playerclass->id == playerClassId && strcmp(unit[i].code, code) == 0) {
+int findUnitIndexByCode(const char *code, int playerClassId)
+{
+    for (int i = 0; i < 6; i++)
+    {
+        if (unit[i].playerclass->id == playerClassId && strcmp(unit[i].code, code) == 0)
+        {
             return i;
         }
     }
     return -1; // Unit not found
+}
+
+// function to atack unit, or at least it's supposed to be
+void atack()
+{
+    system("cls");
+    displayGrid();
+    //selecionar();
 }
 
 void displayGrid()
@@ -850,7 +825,6 @@ Startmenu:
         case 2:
             system("cls");
             displayGrid();
-            position[1][1] = selecionar(grid);
             displayUnitActions();
             scanf("%d", &choice);
             if (choice == 1)
@@ -863,9 +837,7 @@ Startmenu:
                     displayGrid();
                     break;
                 case 2:
-                    system("cls");
-                    displayGrid();
-                    // atacar();
+                    atack();
                     break;
                 default:
                     break;
