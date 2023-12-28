@@ -161,10 +161,10 @@ void displayGrid();
 void displayActions();
 void posicionar(char grid[16][26], int currentplayer, int playerclass);
 int *selecionar(char grid[16][26]);
-void moverPeca(char grid[GRID_HEIGHT][GRID_WIDTH], int currentPlayer, struct PlayerClass *playerClass);
+void moverPeca(char grid[GRID_HEIGHT][GRID_WIDTH], int currentPlayer, struct PlayerClass* playerClass);
 bool isValidCoordinate(int row, char col);
 int convertToGridIndex(char col);
-int findUnitIndexByCode(const char *code, int playerClassId);
+int findUnitIndexByCode(const char* code, int playerClassId);
 void saveGameToFile(struct Player players[2], const char *saveFileName);
 void loadGameFromFile(struct Player players[2], const char *loadFileName);
 void playerRegister(int option);
@@ -515,11 +515,11 @@ void moverPeca(char grid[16][26], int currentPlayer)
     int fromL, toL;
 
     // as coordenadas da peça a ser movida
-    printf("Digite as coordenadas da peça a ser movida (linha/coluna): ");
+    printf("Digite as coordenadas da peca a ser movida (linha/coluna): ");
     scanf("%d %c", &fromL, &fromC);
 
     // as coordenadas para onde a peça será movida
-    printf("Digite as coordenadas para onde a peça será movida (linha/coluna): ");
+    printf("Digite as coordenadas para onde a peca sera movida (linha/coluna): ");
     scanf("%d %c", &toL, &toC);
 
     // Validate coordinates
@@ -544,11 +544,45 @@ void moverPeca(char grid[16][26], int currentPlayer)
     }
     code[j] = '\0';
 
-    // Move the piece to the new position
-    int size = strlen(code);
-    for (int h = 0; h < size; h++)
+    // Check for potential collisions in the destination grid cell
+    if (grid[toL][toC] != ' ')
     {
-        grid[toL][toC + h] = code[h];
+        // If a collision is detected, find the nearest available cell
+        int nearestL, nearestC, minDistance = INT_MAX;
+
+        for (int c = 0; c < GRID_WIDTH; c++)
+        {
+            for (int l = 0; l < GRID_HEIGHT; l++)
+            {
+                if (grid[l][c] == ' ')
+                {
+                    int distance = abs(toL - l) + abs(toC - c);
+
+                    if (distance < minDistance)
+                    {
+                        minDistance = distance;
+                        nearestL = l;
+                        nearestC = c;
+                    }
+                }
+            }
+        }
+
+        // Move the piece to the nearest available cell
+        int size = strlen(code);
+        for (int h = 0; h < size; h++)
+        {
+            grid[nearestL][nearestC + h] = code[h];
+        }
+    }
+    else
+    {
+        // Move the piece to the intended destination
+        int size = strlen(code);
+        for (int h = 0; h < size; h++)
+        {
+            grid[toL][toC + h] = code[h];
+        }
     }
 
     // Clear the source position
