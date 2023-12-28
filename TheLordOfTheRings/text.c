@@ -161,7 +161,8 @@ void displayGrid();
 void displayActions();
 void posicionar(char grid[16][26], int currentplayer, int playerclass);
 int *selecionar(char grid[16][26]);
-void moverPeca(char grid[GRID_HEIGHT][GRID_WIDTH], int currentPlayer, struct PlayerClass* playerClass);
+void atack();
+void moverPeca(char grid[GRID_HEIGHT][GRID_WIDTH], int currentPlayer, struct PlayerClass *playerClass);
 bool isValidCoordinate(int row, char col);
 int convertToGridIndex(char col);
 int findUnitIndexByCode(const char* code, int playerClassId);
@@ -591,17 +592,18 @@ void moverPeca(char grid[16][26], int currentPlayer)
         grid[fromL][h] = ' ';
     }
 
-
     int unitIndex = findUnitIndexByCode(code, players[currentPlayer].playerClass->id);
     players[currentPlayer].coins -= unit[unitIndex].unitType->moveCost;
 
-     if (unitIndex != -1 && players[currentPlayer].unit[unitIndex] != NULL) {
+    if (unitIndex != -1 && players[currentPlayer].unit[unitIndex] != NULL)
+    {
         // Update the x and y coordinates of the moved unit
         players[currentPlayer].unit[unitIndex] = malloc(sizeof(struct Unit *));
         players[currentPlayer].unit[unitIndex]->x = toC;
         players[currentPlayer].unit[unitIndex]->y = toL;
-     }
-    else {
+    }
+    else
+    {
         printf("Invalid piece. Please select a valid piece.\n");
     }
 }
@@ -633,9 +635,60 @@ int findUnitIndexByCode(const char *code, int playerClassId)
 // function to atack unit, or at least it's supposed to be
 void atack()
 {
+    char fromC, atkC;
+    int fromL, atkL;
+    int s = strlen(building);
+    int atackpower = 0;
+    // display grid
     system("cls");
     displayGrid();
-    //selecionar();
+
+    // selecionar as coordenadas da peça
+    printf("Digite as coordenadas da pe%ca que deseja utilizar (linha/coluna): ", 135);
+    scanf("%d %c", &fromL, &fromC);
+
+    // selecionar as coordenadas da peça a ser atacada
+    printf("Digite as coordenadas da pe%ca que deseja atacar (linha/coluna): ", 135);
+    scanf("%d %c", &atkL, &atkC);
+
+    // Validate coordinates
+    if (!isValidCoordinate(fromL, fromC) || !isValidCoordinate(atkL, atkC))
+    {
+        printf("Invalid coordinates. Please try again.\n");
+        return;
+    }
+
+    // Convert coordinates to grid indices
+    fromC = convertToGridIndex(fromC);
+    atkC = convertToGridIndex(atkC);
+    fromL--;
+    atkL--;
+
+    // verifica se tem uma peça para atacar
+    if (grid[atkL][atkC] == ' ')
+    {
+        printf("N%co existe uma pe%ca no local selecionado.", 198, 135);
+        Sleep(1000);
+        return 0;
+    }
+    // get the atackpower from the selected build
+    for (int i = 0; i < s; i++)
+    {
+        if (unit[i].x == fromC && unit[i].y == fromL)
+        {
+            atackpower += unit[i].unitType->attackPower;
+        }
+    }
+
+    // take life
+
+    for (int i = 0; i < s; i++)
+    {
+        if (building[i].x == atkC && building[i].y == atkL)
+        {
+            building[i].buildingType->health -= 30;
+        }
+    }
 }
 
 void displayGrid()
@@ -861,24 +914,19 @@ Startmenu:
             displayGrid();
             displayUnitActions();
             scanf("%d", &choice);
-            if (choice == 1)
+
+            switch (choice)
             {
-                switch (choice)
-                {
-                case 1:
-                    moverPeca(grid, currentPlayer, playerClass);
-                    system("cls");
-                    displayGrid();
-                    break;
-                case 2:
-                    atack();
-                    break;
-                default:
-                    break;
-                }
-            }
-            else
-            {
+            case 1:
+                moverPeca(grid, currentPlayer, playerClass);
+                system("cls");
+                displayGrid();
+                break;
+            case 2:
+                atack();
+                break;
+            default:
+                break;
             }
             break;
         case 3:
