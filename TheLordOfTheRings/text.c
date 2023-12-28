@@ -557,20 +557,17 @@ void moverPeca(char grid[16][26], int currentPlayer)
         grid[fromL][h] = ' ';
     }
 
-    int unitIndex = findUnitIndexByCode(code, players[currentPlayer].playerClass->id);
 
-    if (unitIndex != -1)
-    {
+    int unitIndex = findUnitIndexByCode(code, players[currentPlayer].playerClass->id);
+    players[currentPlayer].coins -= unit[unitIndex].unitType->moveCost;
+
+     if (unitIndex != -1 && players[currentPlayer].unit[unitIndex] != NULL) {
         // Update the x and y coordinates of the moved unit
         players[currentPlayer].unit[unitIndex] = malloc(sizeof(struct Unit *));
         players[currentPlayer].unit[unitIndex]->x = toC;
         players[currentPlayer].unit[unitIndex]->y = toL;
-
-        // Display success message
-        printf("Unit moved successfully!\n");
-    }
-    else
-    {
+     }
+    else {
         printf("Invalid piece. Please select a valid piece.\n");
     }
 }
