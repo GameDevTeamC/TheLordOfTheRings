@@ -603,8 +603,10 @@ void atack()
 {
     char fromC, atkC;
     int fromL, atkL;
-    int s = strlen(building);
-    int atackpower = 0;
+    int numberofunits = (strlen(players->unit));
+    int numberofbuidings =(strlen(players->building));
+    int atackpower=0;
+    
     // display grid
     system("cls");
     displayGrid();
@@ -637,22 +639,32 @@ void atack()
         Sleep(1000);
         return 0;
     }
+
     // get the atackpower from the selected build
-    for (int i = 0; i < s; i++)
+    for (int d = 0; d <= 1; d++)
     {
-        if (unit[i].x == fromC && unit[i].y == fromL)
+        
+        for (int i = 0; i < numberofunits; i++)
         {
-            atackpower += unit[i].unitType->attackPower;
+            if (players[d].unit[i] != NULL && players[d].unit[i]->unitType != NULL)
+            {
+                if (players[d].unit[i]->x == fromC && players[d].unit[i]->y == fromL && players[d].unit[i] != NULL)
+                {
+                    atackpower += players[d].unit[i]->unitType->attackPower;
+                }
+            }
         }
     }
 
     // take life
-
-    for (int i = 0; i < s; i++)
+    for (int d = 0; d <= 1; d++)
     {
-        if (building[i].x == atkC && building[i].y == atkL)
+        for (int i = 0; i < numberofbuidings; i++)
         {
-            building[i].buildingType->health -= 30;
+            if (players[d].building[i]->x == atkC && players[d].building[i]->y == atkL)
+            {
+                players[d].building[i]->buildingType->health -= atackpower;
+            }
         }
     }
 }
