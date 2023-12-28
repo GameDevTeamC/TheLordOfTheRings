@@ -515,11 +515,11 @@ void moverPeca(char grid[16][26], int currentPlayer)
     int fromL, toL;
 
     // as coordenadas da peça a ser movida
-    printf("Digite as coordenadas da peça a ser movida (linha/coluna): ");
+    printf("Digite as coordenadas da pe%ca a ser movida (linha/coluna): ", 135);
     scanf("%d %c", &fromL, &fromC);
 
     // as coordenadas para onde a peça será movida
-    printf("Digite as coordenadas para onde a peça será movida (linha/coluna): ");
+    printf("Digite as coordenadas para onde a pe%ca ser%c movida (linha/coluna): ", 135, 160);
     scanf("%d %c", &toL, &toC);
 
     // Validate coordinates
@@ -602,9 +602,43 @@ int findUnitIndexByCode(const char *code, int playerClassId)
 // function to atack unit, or at least it's supposed to be
 void atack()
 {
+    char fromC, atkC;
+    int fromL, atkL;
+
+    // display grid
     system("cls");
     displayGrid();
-    //selecionar();
+
+    // selecionar as coordenadas da peça
+    printf("Digite as coordenadas da pe%ca que deseja utilizar (linha/coluna): ", 135);
+    scanf("%d %c", &fromL, &fromC);
+
+    // selecionar as coordenadas da peça a ser atacada
+    printf("Digite as coordenadas da pe%ca que deseja atacar (linha/coluna): ", 135);
+    scanf("%d %c", &atkL, &atkC);
+
+    // Validate coordinates
+    if (!isValidCoordinate(fromL, fromC) || !isValidCoordinate(atkL, atkC))
+    {
+        printf("Invalid coordinates. Please try again.\n");
+        return;
+    }
+
+    // Convert coordinates to grid indices
+    fromC = convertToGridIndex(fromC);
+    atkC = convertToGridIndex(atkC);
+    fromL--;
+    atkL--;
+
+    //verifica se tem uma peça para atacar
+    if (grid[atkL][atkC]==' ')
+    {
+      printf("N%co existe uma pe%ca no local selecionado.",198,135);
+      Sleep(1000);
+      return 0;
+    }
+    
+
 }
 
 void displayGrid()
