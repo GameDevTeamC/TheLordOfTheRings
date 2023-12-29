@@ -162,6 +162,8 @@ void displayActions();
 void posicionar(char grid[16][26], int currentplayer, int playerclass);
 int *selecionar(char grid[16][26]);
 void atack();
+int hasMineOnGrid(int currentPlayer);
+void addMineIncome(int currentPlayer);
 void moverPeca(char grid[GRID_HEIGHT][GRID_WIDTH], int currentPlayer, struct PlayerClass *playerClass);
 bool isValidCoordinate(int row, char col);
 int convertToGridIndex(char col);
@@ -681,15 +683,39 @@ void atack()
     }
 
     // take life
-
     for (int i = 0; i < s; i++)
     {
         if (building[i].x == atkC && building[i].y == atkL)
         {
             building[i].buildingType->health -= 30;
         }
+        if (building[i].buildingType->health <= 0)
+        {
+            grid[atkL][atkC] = ' ';
+            printf("O pr%cdio foi destru%cdo!\n", 130, 161);
+        }
     }
 }
+
+// Function to check if the player has a mine on the grid
+/*int hasMineOnGrid(int currentPlayer) {
+    for (int i = 0; i < strlen(building); i++) {
+        if (players[currentPlayer].building[i] != NULL &&
+            players[currentPlayer].building[i]->buildingType != NULL &&
+            players[currentPlayer].building[i]->buildingType->id == 2) {
+            // Building with id 2 represents a mine
+            return 1; // Player has a mine on the grid
+        }
+    }
+    return 0; // Player does not have a mine on the grid
+}*/
+
+// Function to add mine income to player's coins
+/*void addMineIncome(int currentPlayer) {
+    if (hasMineOnGrid(currentPlayer)) {
+        players[currentPlayer].coins += MINE_INCOME;
+    }
+}*/
 
 void displayGrid()
 {
@@ -895,12 +921,24 @@ Startmenu:
 
         displayGrid();
         printf("Vez do jogador %d (%s)\n", players[currentPlayer].id, players[currentPlayer].playerClass->name);
+
         printf("Castar Coins: %d\n", players[currentPlayer].coins);
 
-        displayActions();
-
-        printf("Op%c%co:", 135, 198);
-        scanf("%d", &choice);
+        // Check if the current player has enough coins to take a turn
+        if (players[currentPlayer].coins > 0)
+        {
+            displayActions();
+            printf("Op%c%co:", 135, 198);
+            scanf("%d", &choice);
+        }
+        else
+        {
+            // Automatically switch to the other player's turn
+            printf("Sem Castar Coins. A trocar para o pr%cximo jogador.\n", 162);
+            currentPlayer = (currentPlayer + 1) % 2;
+            Sleep(2000);
+            continue; // Skip the rest of the loop and start the next iteration
+        }
 
         switch (choice)
         {
@@ -924,12 +962,15 @@ Startmenu:
                 break;
             case 2:
                 atack();
+                system("cls");
+                displayGrid();
                 break;
             default:
                 break;
             }
             break;
         case 3:
+            //addMineIncome(currentPlayer);
             if (currentPlayer == 0)
             {
                 currentPlayer = 1;
