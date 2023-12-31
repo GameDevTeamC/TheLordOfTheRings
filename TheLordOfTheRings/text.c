@@ -376,10 +376,10 @@ int countUnits(int currentPlayer)
 }
 
 // Função para posicionar as construções e unidades
-void posicionar(struct Player players[2], char grid_a[16][26], int currentPlayer)
+void posicionar(struct Player players[2], char grid[16][26], int currentPlayer)
 {
     char letrapos;
-    int numpos, option, buildingId, unitId, numUnits = 0, numBuildings = 0;
+    int numpos, option, buildingId, unitId, numUnits = 0, numBuildings = 0, verifyPos = 0;
 
     numUnits = countUnits(currentPlayer);
     numBuildings = countBuildings(currentPlayer);
@@ -390,6 +390,16 @@ void posicionar(struct Player players[2], char grid_a[16][26], int currentPlayer
     else
         unitId = unitMenu();
 
+VerifyPos:
+    if (verifyPos == 1)
+    {
+        system("cls");
+        displayGrid();
+        printf("Posição selecionada Ocupada!!\nSelecionar nova Posição\n");
+        numpos = NULL;
+        letrapos = NULL;
+    }
+
     do
     {
         printf("\nSelecione a posi%c%co\nN%cmero: ", 135, 198, 163);
@@ -399,7 +409,7 @@ void posicionar(struct Player players[2], char grid_a[16][26], int currentPlayer
     do
     {
         getchar();
-        printf("\nLetra: ");
+        printf("Letra: ");
         scanf("%c", &letrapos);
 
     } while (letrapos > 122 || letrapos < 97);
@@ -416,6 +426,15 @@ void posicionar(struct Player players[2], char grid_a[16][26], int currentPlayer
                 int size = strlen(building[i].code);
                 int verify = (letrapos + size);
                 int aux = verify - 26;
+
+                for (int j = 0; j < size; j++)
+                {
+                    if (grid[numpos][letrapos + j] != ' ')
+                    {
+                        verifyPos = 1;
+                        goto VerifyPos;
+                    }
+                }
 
                 // Aloca memória para a construção no jogador
                 players[currentPlayer].building[numBuildings] = malloc(sizeof(struct Building *));
@@ -435,7 +454,7 @@ void posicionar(struct Player players[2], char grid_a[16][26], int currentPlayer
 
                     for (int h = 0; h < size; h++)
                     {
-                        grid_a[numpos][letrapos++] = building[i].code[h];
+                        grid[numpos][letrapos++] = building[i].code[h];
                     }
                 }
                 else
@@ -450,7 +469,7 @@ void posicionar(struct Player players[2], char grid_a[16][26], int currentPlayer
 
                     for (int h = 0; h < size; h++)
                     {
-                        grid_a[numpos][letrapos++] = building[i].code[h];
+                        grid[numpos][letrapos++] = building[i].code[h];
                     }
                 }
                 numBuildings++;
@@ -467,6 +486,15 @@ void posicionar(struct Player players[2], char grid_a[16][26], int currentPlayer
                 int size = strlen(unit[i].code);
                 int verify = (letrapos + size);
                 int aux = verify - 26;
+
+                for (int j = 0; j < size; j++)
+                {
+                    if (grid[numpos][letrapos + j] != ' ')
+                    {
+                        verifyPos = 1;
+                        goto VerifyPos;
+                    }
+                }
 
                 // Aloca memória para a unidade no jogador
                 players[currentPlayer].unit[numUnits] = malloc(sizeof(struct Unit *));
@@ -486,7 +514,7 @@ void posicionar(struct Player players[2], char grid_a[16][26], int currentPlayer
 
                     for (int h = 0; h < size; h++)
                     {
-                        grid_a[numpos][letrapos++] = unit[i].code[h];
+                        grid[numpos][letrapos++] = unit[i].code[h];
                     }
                 }
                 else
@@ -501,7 +529,7 @@ void posicionar(struct Player players[2], char grid_a[16][26], int currentPlayer
 
                     for (int h = 0; h < size; h++)
                     {
-                        grid_a[numpos][letrapos++] = unit[i].code[h];
+                        grid[numpos][letrapos++] = unit[i].code[h];
                     }
                 }
                 numUnits++;
