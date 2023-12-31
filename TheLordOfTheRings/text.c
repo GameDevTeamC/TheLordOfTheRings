@@ -844,6 +844,7 @@ void displayActions()
     printf("1. Posicionar Constru%c%co\n", 135, 198);
     printf("2. Selecionar Unidade\n");
     printf("3. Encerrar Turno\n");
+    printf("4. Guardar jogo\n");
 }
 
 int settingsmenu()
@@ -875,12 +876,10 @@ int settingsmenu()
         }
     } while (choice < 1 || choice > 4);
 }
-int main()
-{
 
-    // variables
+void menu() {
+    
     int currentPlayer = 0;
-    int castarCoins[2] = {INITIAL_CASTAR_COINS, INITIAL_CASTAR_COINS};
     int choice;
 
     // clean display array
@@ -890,7 +889,7 @@ int main()
         startverify++;
     }
 
-// start menu
+    // start menu
 Startmenu:
     system("cls");
     printf("Bem-Vindo ao Ring World!\n\n");
@@ -960,6 +959,25 @@ Startmenu:
         goto Startmenu;
         break;
     }
+}
+
+// Function to return to the start menu
+void returnToStartMenu()
+{
+    system("cls");
+    printf("Voltando para o menu inicial...\n");
+    Sleep(2000);
+    return menu();
+}
+
+int main()
+{
+
+    // variables
+    int currentPlayer = 0;
+    int castarCoins[2] = {INITIAL_CASTAR_COINS, INITIAL_CASTAR_COINS};
+
+    menu();
 
     // Game loop
     while (1)
@@ -1020,17 +1038,17 @@ Startmenu:
             }
             break;
         case 3:
-            
+
             if (currentPlayer == 0)
             {
                 addMineIncome(players, currentPlayer);
-                currentPlayer = 1;          
+                currentPlayer = 1;
             }
             else if (currentPlayer == 1)
             {
                 addMineIncome(players, currentPlayer);
                 currentPlayer = 0;
-           
+
             }
             break;
         case 4:
@@ -1038,10 +1056,21 @@ Startmenu:
             printf("\nA sair do Ring World. At%c %c pr%cxima!\n", 130, 133, 162);
             saveGameToFile(players, "save1" SAVE_FILE_EXTENSION, currentPlayer);
             Sleep(2000);
-            break;
+
+            // Check if the game should continue or go back to the start menu
+            int continueGame;
+            printf("Deseja continuar jogando? (1-Sim, 0-Nao): ");
+            scanf("%d", &continueGame);
+            if (!continueGame)
+            {
+                returnToStartMenu(); // Call the function to go back to the start menu
+                break; // Exit the game loop and go back to the start menu
+            }
+
         default:
             printf("Op%c%co Inv%clida. Escolher outra vez.\n", 135, 198, 160);
         }
+
     }
 
     return 0;
