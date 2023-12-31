@@ -907,8 +907,7 @@ int settingsmenu()
 
 void menu() {
     
-    int currentPlayer = 0;
-    int choice;
+    int currentPlayer = 0, verifyOption = 0, choice;
 
     // clean display array
     if (startverify == 0)
@@ -920,11 +919,19 @@ void menu() {
     // start menu
 Startmenu:
     system("cls");
+
     printf("Bem-Vindo ao Ring World!\n\n");
+
     printf("1. Come%car um Novo Jogo\n", 135);
     printf("2. Carregar Jogo\n");
     printf("3. Defeni%c%ces\n", 135, 228);
     printf("4. Sair\n\n");
+
+    // message if option invalid
+    if (verifyOption == 1)
+        printf("Escolha inv%clida, por favor selecione um n%cmero entre 1-4!\n\n", 160, 163);
+
+
     printf("Introduza a sua escolha (1-4): ");
     scanf("%d", &choice);
 
@@ -982,8 +989,7 @@ Startmenu:
         break;
 
     default:
-        printf("\nEscolha inv%clida, por favor selecione um n%cmero entre 1-4!\n", 160, 163);
-        Sleep(2000);
+        verifyOption = 1;
         goto Startmenu;
         break;
     }
