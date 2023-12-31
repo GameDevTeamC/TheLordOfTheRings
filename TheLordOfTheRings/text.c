@@ -376,7 +376,7 @@ int countUnits(int currentPlayer)
 }
 
 // Função para posicionar as construções e unidades
-void posicionar(char grid_a[16][26], int currentPlayer)
+void posicionar(struct Player players[2], char grid_a[16][26], int currentPlayer)
 {
     char letrapos;
     int numpos, option, buildingId, unitId, numUnits = 0, numBuildings = 0;
@@ -429,7 +429,9 @@ void posicionar(char grid_a[16][26], int currentPlayer)
                     players[currentPlayer].building[numBuildings]->id = building[i].id;
                     players[currentPlayer].building[numBuildings]->x = letrapos;
                     players[currentPlayer].building[numBuildings]->y = numpos;
-                    // strcpy(players[currentPlayer].building[numUnits]->code, building[i].code);
+                    strcpy(players[currentPlayer].building[numBuildings]->code, building[i].code);
+                    players[currentPlayer].building[numBuildings]->buildingType = building[i].buildingType;
+                    players[currentPlayer].building[numBuildings]->playerclass = building[i].playerclass;
 
                     for (int h = 0; h < size; h++)
                     {
@@ -442,6 +444,9 @@ void posicionar(char grid_a[16][26], int currentPlayer)
                     players[currentPlayer].building[numBuildings]->id = building[i].id;
                     players[currentPlayer].building[numBuildings]->x = letrapos;
                     players[currentPlayer].building[numBuildings]->y = numpos;
+                    strcpy(players[currentPlayer].building[numBuildings]->code, building[i].code);
+                    players[currentPlayer].building[numBuildings]->buildingType = building[i].buildingType;
+                    players[currentPlayer].building[numBuildings]->playerclass = building[i].playerclass;
 
                     for (int h = 0; h < size; h++)
                     {
@@ -475,6 +480,9 @@ void posicionar(char grid_a[16][26], int currentPlayer)
                     players[currentPlayer].unit[numUnits]->id = unit[i].id;
                     players[currentPlayer].unit[numUnits]->x = letrapos;
                     players[currentPlayer].unit[numUnits]->y = numpos;
+                    strcpy(players[currentPlayer].unit[numUnits]->code, unit[i].code);
+                    players[currentPlayer].unit[numUnits]->unitType = unit[i].unitType;
+                    players[currentPlayer].unit[numUnits]->playerclass = unit[i].playerclass;
 
                     for (int h = 0; h < size; h++)
                     {
@@ -487,6 +495,9 @@ void posicionar(char grid_a[16][26], int currentPlayer)
                     players[currentPlayer].unit[numUnits]->id = unit[i].id;
                     players[currentPlayer].unit[numUnits]->x = letrapos;
                     players[currentPlayer].unit[numUnits]->y = numpos;
+                    strcpy(players[currentPlayer].unit[numUnits]->code, unit[i].code);
+                    players[currentPlayer].unit[numUnits]->unitType = unit[i].unitType;
+                    players[currentPlayer].unit[numUnits]->playerclass = unit[i].playerclass;
 
                     for (int h = 0; h < size; h++)
                     {
@@ -693,7 +704,7 @@ void atack()
     }
 
     // take life
-    for (int d = 0; d <= 1; d++)
+    /*for (int d = 0; d <= 1; d++)
     {
         for (int i = 0; i < numberofbuidings; i++)
         {
@@ -707,28 +718,54 @@ void atack()
             grid[atkL][atkC] = ' ';
             printf("O pr%cdio foi destru%cdo!\n", 130, 161);
         }
-    }
+    }*/
 }
 
 // Function to check if the player has a mine on the grid
-/*int hasMineOnGrid(int currentPlayer) {
-    for (int i = 0; i < strlen(building); i++) {
+
+int numOfMinePlayer(struct Player players[2], int currentPlayer)
+{
+
+    int count = 0;
+
+    for (int i = 0; i < 10; i++) {
+
+        //players[currentPlayer].building[i] = malloc(sizeof(struct Building*));
+
         if (players[currentPlayer].building[i] != NULL &&
             players[currentPlayer].building[i]->buildingType != NULL &&
             players[currentPlayer].building[i]->buildingType->id == 2) {
-            // Building with id 2 represents a mine
-            return 1; // Player has a mine on the grid
+
+            count++;
         }
     }
-    return 0; // Player does not have a mine on the grid
-}*/
+    return count;
+}
+
+int hasMineOnGrid(struct Player players[2], int currentPlayer) {
+
+    int numMines = 0;
+
+    numMines = numOfMinePlayer(players, currentPlayer);
+
+    for (int i = 0; i < numMines; i++) {
+
+        if (players[currentPlayer].building[i] != NULL &&
+            players[currentPlayer].building[i]->buildingType != NULL &&
+            players[currentPlayer].building[i]->buildingType->id == 2) {
+
+            return 1;
+        }
+    }
+    return 0;
+}
 
 // Function to add mine income to player's coins
-/*void addMineIncome(int currentPlayer) {
-    if (hasMineOnGrid(currentPlayer)) {
+void addMineIncome(struct Player players[2], int currentPlayer) {
+    if (hasMineOnGrid(players, currentPlayer)) {
         players[currentPlayer].coins += MINE_INCOME;
     }
-}*/
+}
 
 void displayGrid()
 {
@@ -958,7 +995,7 @@ Startmenu:
         case 1:
             system("cls");
             displayGrid();
-            posicionar(grid, currentPlayer, playerClass);
+            posicionar(players, grid, currentPlayer, playerClass);
             break;
         case 2:
             system("cls");
@@ -983,14 +1020,17 @@ Startmenu:
             }
             break;
         case 3:
-            //addMineIncome(currentPlayer);
+            
             if (currentPlayer == 0)
             {
-                currentPlayer = 1;
+                addMineIncome(players, currentPlayer);
+                currentPlayer = 1;          
             }
             else if (currentPlayer == 1)
             {
+                addMineIncome(players, currentPlayer);
                 currentPlayer = 0;
+           
             }
             break;
         case 4:
