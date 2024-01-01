@@ -436,14 +436,24 @@ VerifyPos:
                     }
                 }
 
-                // Aloca memória para a construção no jogador
-                players[currentPlayer].building[numBuildings] = malloc(sizeof(struct Building *));
-
-                players[currentPlayer].coins -= building[i].buildingType->buyCost;
-
-                if (verify > 26)
+                while (1)
                 {
-                    letrapos -= aux;
+                    if (players[currentPlayer].coins - building->buildingType->buyCost < 0)
+                    {
+                        printf("Nao tem coins suficientes. Escolha outra construcao.\n");
+                        Sleep(2000);
+                        break;  // Sai do loop
+                    }
+
+                    // Aloca memória para a construção no jogador
+                    players[currentPlayer].building[numBuildings] = malloc(sizeof(struct Building*));
+
+                    players[currentPlayer].coins -= building[i].buildingType->buyCost;
+
+                    if (verify > 26)
+                    {
+                        letrapos -= aux;
+                    }
 
                     players[currentPlayer].building[numBuildings]->id = building[i].id;
                     players[currentPlayer].building[numBuildings]->x = letrapos;
@@ -456,24 +466,10 @@ VerifyPos:
                     {
                         grid[numpos][letrapos++] = building[i].code[h];
                     }
-                }
-                else
-                {
 
-                    players[currentPlayer].building[numBuildings]->id = building[i].id;
-                    players[currentPlayer].building[numBuildings]->x = letrapos;
-                    players[currentPlayer].building[numBuildings]->y = numpos;
-                    strcpy(players[currentPlayer].building[numBuildings]->code, building[i].code);
-                    players[currentPlayer].building[numBuildings]->buildingType = building[i].buildingType;
-                    players[currentPlayer].building[numBuildings]->playerclass = building[i].playerclass;
-
-                    for (int h = 0; h < size; h++)
-                    {
-                        grid[numpos][letrapos++] = building[i].code[h];
-                    }
+                    numBuildings++;
+                    break;
                 }
-                numBuildings++;
-                break;
             }
         }
     }
@@ -496,14 +492,24 @@ VerifyPos:
                     }
                 }
 
-                // Aloca memória para a unidade no jogador
-                players[currentPlayer].unit[numUnits] = malloc(sizeof(struct Unit *));
-
-                players[currentPlayer].coins -= unit[i].unitType->buyCost;
-
-                if (verify > 26)
+                while (1)  // Loop infinito
                 {
-                    letrapos -= aux;
+                    if (players[currentPlayer].coins - unit->unitType->buyCost < 0)
+                    {
+                        printf("Nao tem coins suficientes. Escolha outra unidade.\n");
+                        Sleep(2000);
+                        break;  // Sai do loop
+                    }
+
+                    // Aloca memória para a unidade no jogador
+                    players[currentPlayer].unit[numUnits] = malloc(sizeof(struct Unit*));
+
+                    players[currentPlayer].coins -= unit[i].unitType->buyCost;
+
+                    if (verify > 26)
+                    {
+                        letrapos -= aux;
+                    }
 
                     players[currentPlayer].unit[numUnits]->id = unit[i].id;
                     players[currentPlayer].unit[numUnits]->x = letrapos;
@@ -516,24 +522,10 @@ VerifyPos:
                     {
                         grid[numpos][letrapos++] = unit[i].code[h];
                     }
-                }
-                else
-                {
 
-                    players[currentPlayer].unit[numUnits]->id = unit[i].id;
-                    players[currentPlayer].unit[numUnits]->x = letrapos;
-                    players[currentPlayer].unit[numUnits]->y = numpos;
-                    strcpy(players[currentPlayer].unit[numUnits]->code, unit[i].code);
-                    players[currentPlayer].unit[numUnits]->unitType = unit[i].unitType;
-                    players[currentPlayer].unit[numUnits]->playerclass = unit[i].playerclass;
-
-                    for (int h = 0; h < size; h++)
-                    {
-                        grid[numpos][letrapos++] = unit[i].code[h];
-                    }
+                    numUnits++;
+                    break;
                 }
-                numUnits++;
-                break;
             }
         }
     }
