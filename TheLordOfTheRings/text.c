@@ -156,18 +156,27 @@ struct GameState
 // declarate functions
 void cleantable();
 int countBuildings();
+char buildingsmenu();
 int countUnits();
+int actionOption();
 void displayGrid();
 void displayActions();
+void displayUnitActions();
+int countBuildings(int currentPlayer);
+int countUnits(int currentPlayer);
+int settingsmenu();
 void posicionar(char grid[16][26], int currentplayer, int playerclass);
-int *selecionar(char grid[16][26]);
-void atack();
+void attack();
 int hasMineOnGrid(int currentPlayer);
 void addMineIncome(int currentPlayer);
+int numOfMinePlayer(struct Player players[2], int currentPlayer);
 void moverPeca(char grid[GRID_HEIGHT][GRID_WIDTH], int currentPlayer, struct PlayerClass *playerClass);
 bool isValidCoordinate(int row, char col);
 int convertToGridIndex(char col);
 int findUnitIndexByCode(const char* code, int playerClassId);
+void returnToStartMenu();
+void menu();
+int unitMenu();
 void saveGameToFile(struct Player players[2], const char *saveFileName);
 void loadGameFromFile(struct Player players[2], const char *loadFileName);
 void playerRegister(int option);
@@ -559,7 +568,7 @@ void moverPeca(char grid[16][26], int currentPlayer)
     // Validate coordinates
     if (!isValidCoordinate(fromL, fromC) || !isValidCoordinate(toL, toC))
     {
-        printf("Invalid coordinates. Please try again.\n");
+        printf("Coordenadas invalidas. Tente novamente.\n");
         return;
     }
 
@@ -666,7 +675,7 @@ int findUnitIndexByCode(const char *code, int playerClassId)
 }
 
 // function to atack unit, or at least it's supposed to be
-void atack()
+void attack()
 {
     char fromC, atkC;
     int fromL, atkL;
