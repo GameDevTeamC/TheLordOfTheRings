@@ -499,7 +499,7 @@ VerifyPos:
                     }
                 }
 
-                while (1)  // Loop infinito
+                while (1)
                 {
                     if (players[currentPlayer].coins - unit->unitType->buyCost < 0)
                     {
@@ -714,38 +714,41 @@ void attack()
         return 0;
     }
 
-    // get the atackpower from the selected build
+    // get the attack power from the selected unit
     for (int d = 0; d <= 1; d++)
     {
-        
         for (int i = 0; i < numberofunits; i++)
         {
-            if (players[d].unit[i] != NULL && players[d].unit[i]->unitType != NULL)
+            if (players[d].unit[i] != NULL && players[d].unit[i]->unitType != NULL &&
+                players[d].unit[i]->x == fromC && players[d].unit[i]->y == fromL)
             {
-                if (players[d].unit[i]->x == fromC && players[d].unit[i]->y == fromL && players[d].unit[i] != NULL)
-                {
-                    atackpower += players[d].unit[i]->unitType->attackPower;
-                }
+                atackpower += players[d].unit[i]->unitType->attackPower;
             }
         }
     }
 
     // take life
-    /*for (int d = 0; d <= 1; d++)
+    for (int d = 0; d <= 1; d++)
     {
         for (int i = 0; i < numberofbuidings; i++)
         {
-            if (players[d].building[i]->x == atkC && players[d].building[i]->y == atkL)
+            if (players[d].building[i] != NULL &&
+                players[d].building[i]->x == atkC && players[d].building[i]->y == atkL)
             {
+                int oldHealth = players[d].building[i]->buildingType->health;
                 players[d].building[i]->buildingType->health -= atackpower;
+
+                printf("Vida do pr%cdio atacado: %d -> %d\n", 130, oldHealth, players[d].building[i]->buildingType->health);
+                Sleep(3000);
+
+                if (players[d].building[i]->buildingType->health <= 0)
+                {
+                    grid[atkL][atkC] = ' ';
+                    printf("O pr%cdio foi destru%cdo!\n", 130, 161);
+                }
             }
         }
-        if (building[i].buildingType->health <= 0)
-        {
-            grid[atkL][atkC] = ' ';
-            printf("O pr%cdio foi destru%cdo!\n", 130, 161);
-        }
-    }*/
+    }
 }
 
 // Function to check if the player has a mine on the grid
