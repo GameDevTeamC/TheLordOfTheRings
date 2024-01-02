@@ -155,9 +155,7 @@ struct GameState
 
 // declarate functions
 void cleantable();
-int countBuildings();
 char buildingsmenu();
-int countUnits();
 int actionOption();
 void displayGrid();
 void displayActions();
@@ -165,19 +163,19 @@ void displayUnitActions();
 int countBuildings(int currentPlayer);
 int countUnits(int currentPlayer);
 int settingsmenu();
-void posicionar(char grid[16][26], int currentplayer, int playerclass);
+void posicionar(struct Player players[2], char grid[16][26], int currentPlayer);
 void attack();
-int hasMineOnGrid(int currentPlayer);
-void addMineIncome(int currentPlayer);
+int hasMineOnGrid(struct Player players[2], int currentPlayer);
+void addMineIncome(struct Player players[2], int currentPlayer);
 int numOfMinePlayer(struct Player players[2], int currentPlayer);
-void moverPeca(char grid[GRID_HEIGHT][GRID_WIDTH], int currentPlayer, struct PlayerClass *playerClass);
+void moverPeca(char grid[16][26], int currentPlayer);
 bool isValidCoordinate(int row, char col);
 int convertToGridIndex(char col);
 int findUnitIndexByCode(const char* code, int playerClassId);
 void returnToStartMenu();
 void menu();
 int unitMenu();
-void saveGameToFile(struct Player players[2], const char *saveFileName);
+void saveGameToFile(struct Player players[2], const char *saveFileName, int currentPlayer);
 void loadGameFromFile(struct Player players[2], const char *loadFileName);
 void playerRegister(int option);
 
@@ -1064,7 +1062,7 @@ int main()
                 displayGrid();
                 break;
             case 2:
-                atack();
+                attack();
                 system("cls");
                 displayGrid();
                 break;

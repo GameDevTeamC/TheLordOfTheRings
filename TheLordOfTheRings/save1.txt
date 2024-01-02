@@ -1,13 +1,13 @@
 Player 1:
   ID: 1
-  Coins: 80
+  Coins: 70
   Player Class:
     ID: 1
     Name: Gondor
   Player Buildings:
-    ID: 2
+    ID: 1
     X: 0
-    Y: 15
+    Y: 13
 
 --------------- // -------------
 Player 2:
