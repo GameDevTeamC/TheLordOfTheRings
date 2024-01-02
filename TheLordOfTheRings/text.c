@@ -169,7 +169,7 @@ int hasMineOnGrid(struct Player players[2], int currentPlayer);
 void addMineIncome(struct Player players[2], int currentPlayer);
 int numOfMinePlayer(struct Player players[2], int currentPlayer);
 void moverPeca(char grid[16][26], int currentPlayer);
-bool isValidCoordinate(int row, char col);
+int isValidCoordinate(int row, char col);
 int convertToGridIndex(char col);
 int findUnitIndexByCode(const char* code, int playerClassId);
 void returnToStartMenu();
@@ -649,9 +649,16 @@ void moverPeca(char grid[16][26], int currentPlayer)
 }
 
 // Helper function to check if coordinates are valid
-bool isValidCoordinate(int row, char col)
+int isValidCoordinate(int row, char col)
 {
-    return (col >= 'a' && col <= 'z' || col >= 'A' && col <= 'Z') && row >= 1 && row <= GRID_HEIGHT;
+    if ((col >= 'a' && col <= 'z' || col >= 'A' && col <= 'Z') && row >= 1 && row <= GRID_HEIGHT)
+    {
+        return 1;  // Return 1 to indicate true
+    }
+    else
+    {
+        return 0;  // Return 0 to indicate false
+    }
 }
 
 // Helper function to convert column character to grid index
