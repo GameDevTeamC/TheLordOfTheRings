@@ -299,13 +299,6 @@ void playerRegister(int option)
         players[1].playerClass = &playerClass[option - 2];
     }
 }
-
-// Function to display the game grid
-void displayGrid();
-
-// Function to display available actions
-void displayActions();
-
 // chose between unit or building
 int actionOption()
 {

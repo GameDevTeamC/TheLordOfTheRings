@@ -1,0 +1,18 @@
+Player 1:
+  ID: 1
+  Coins: 70
+  Player Class:
+    ID: 1
+    Name: Gondor
+  Player Buildings:
+    ID: 1
+    X: 0
+    Y: 0
+
+--------------- // -------------
+Player 2:
+  ID: 2
+  Coins: 100
+  Player Class:
+    ID: 2
+    Name: Mordor
